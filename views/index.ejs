@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+      .border-bottom{
+        border-bottom: 2px solid #ddd;
+        padding: 1em 0
+      }
+      .status{
+        margin-top: 3em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <h1><%= title %></h1>
+        <p class="lead">
+
+          <ol class="breadcrumb">
+            <li><a href="/" class="">首页</a></li>
+            <li class="active"><a href="/add" class="">添加需求</a></li>
+            <!--<li><a href="/admin" class="btn btn-info btn-xs pull-right">管理员登陆</a></li>-->
+          </ol>
+
+        <!--<a href="/add" class="btn btn-primary btn-sm">添加需求</a>-->
+          <span class="label label-danger"><%= message %></span>
+          <!--<a href="/admin" class="btn btn-info btn-xs pull-right">管理员登陆</a>-->
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <% for (var i=0; i<messages.length; i++){ %>
+            <div class="col-lg-1 col-sm-1">
+              <div class="status">
+                <% if (messages[i].status == 1){ %>
+                <span class="btn btn-danger pull-left btn-xs">未回复</span>
+                <% }else{ %>
+                <span class="btn btn-success pull-left btn-xs">已回复</span>
+                <% } %>
+              </div>
+            </div>
+            <div class="col-lg-5 col-sm-11 border-bottom">
+              <div class="title">
+                <h3><%= messages[i].title %></h3>
+              </div>
+              <div class="content">
+                <% if (messages[i].content == '' || !messages[i].content){ %>
+                <p><strong>描述：</strong>（空）</p>
+                <% }else{ %>
+                <p><strong>描述：</strong><%= messages[i].content %></p>
+                <% } %>
+              </div>
+              <div class="reContent">
+                <% if (messages[i].status != 1){ %>
+                <div class="alert alert-info">
+                  <p><strong>回复：</strong><%= messages[i].reContent %></p>
+                </div>
+                <% } %>
+              </div>
+              <div class="others">
+                <span class="label label-info"><%= messages[i].time %></span>
+                <span class="label label-info"><%= messages[i].dept %></span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+        <div class="col-lg-3">
+          <h3>其他展示</h3>
+          <img src="http://10.20.1.100/index/item-1.jpg" width=100% alt="">
+          <img src="http://10.20.1.100/index/item-2.jpg" width=100% alt="">
+          <!--<img src="http://10.20.1.100/index/item-3.jpg" width=100% alt="">-->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
