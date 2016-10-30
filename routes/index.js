@@ -1,24 +1,28 @@
 var express = require('express');
 var dbDept = require('../db/dept.js');
 var dbMessage = require('../db/message.js');
+var dbCates = require('../db/cates.js');
 var myUtil = require('../util/myUtil.js');
 var router = express.Router();
 
 /* 传输消息参数，获取add页面 */
 function getAddPage(res,message){
-  dbDept.findAllDepts(function(errs,rows){
-    if(errs){
-      res.render('err',{
-        message: errs,
-        error: errs
+  dbDept.findAllDepts(function(errs1,rows1){
+    dbCates.getAllCates(function(errs2,rows2){
+      dbCates.getkeysByCate('IT', function(errs3,rows3){
+        if(!errs1 && !errs2 && !errs3) {
+          res.render('add', {
+            title: '添加需求',
+            message: message,
+            depts: rows1,
+            cates: rows2,
+            keys: rows3
+          });
+        }else{
+          next();
+        }
       });
-    }else{
-      res.render('add',{
-        title: '添加需求',
-        message: message,
-        depts: rows
-      });
-    }
+    });
   });
 }
 
@@ -39,6 +43,19 @@ function getIndexPage(res,message){
     }
   });
 }
+
+/* ----------------- BEGIN Ajax ----------------------*/
+/* GET keys by cate use ajax*/
+router.get('/ajax/:cate', function(req,res,next){
+  var cate = req.params.cate;
+  dbCates.getkeysByCate(cate,function(errs,rows){
+    res.render('ajax/add_keys',{
+      cate: cate,
+      keys: rows
+    });
+  });
+});
+/* ----------------- END Ajax ----------------------*/
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
