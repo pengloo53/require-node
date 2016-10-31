@@ -1,15 +1,22 @@
-var id;
+var delId;
 function openWindow(id){
   document.getElementById('light').style.display='block';
   document.getElementById('fade').style.display='block';
-  id = this.id;
+  delId = id;
 }
+
 function closeWindow(){
   document.getElementById('light').style.display='none';
   document.getElementById('fade').style.display='none';
 }
 
-function delMessage(id){
+function delMessage(){
+  closeWindow();
+  ajax_delMessage(delId);
+  document.getElementById(delId).style.display = 'none';
+}
+
+function ajax_delMessage(id){
   // 第一步：获取对象
   var xmlhttp;
   if(window.XMLHttpRequest){
@@ -26,7 +33,7 @@ function delMessage(id){
   }
 
   // 第三步：设置请求
-  xmlhttp.open("POST","/admin/del/"+Id,true);
+  xmlhttp.open("GET","/admin/del/"+id, true);
 
   // 第四步：发送请求
   xmlhttp.send();

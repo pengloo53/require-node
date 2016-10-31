@@ -26,6 +26,7 @@ exports.delDept = function(id, callback){
   connect.endConn(conn);
 };
 
+// 根据Plant查找所有的deptname
 exports.findAllDepts = function (callback){
   var conn = connect.getConn();
   var statement = 'select * from dept where plant = "' + plant + '"';

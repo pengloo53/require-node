@@ -76,10 +76,20 @@ router.post('/1', function(req,res,next){
   }
 });
 
-/* Delete message */
-router.post('/del/:id', function(req,res,next){
-  var id = req.params.id;
 
+/*------------------------BEGIN Ajax-----------------------------------*/
+/* Delete message */
+router.get('/del/:id', function(req,res,next){
+  var id = req.params.id;
+  dbMessage.delMessage(id,function(errs,rows){
+    if(!errs){
+      res.end('删除成功');
+    }else{
+      next();
+    }
+  });
 });
+/*------------------------END Ajax-----------------------------------*/
+
 
 module.exports = router;

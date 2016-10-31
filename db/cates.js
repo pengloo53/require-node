@@ -14,7 +14,7 @@ exports.getAllCates = function(callback){
   connect.endConn(client);
 };
 
-// 根据category得到所有的key
+// 根据category得到所有的key以及对应num
 exports.getkeysByCate = function(cate, callback){
   var client = connect.getConn();
   var statement = 'select * from cates where category = "' + cate +'"';
@@ -25,9 +25,33 @@ exports.getkeysByCate = function(cate, callback){
 };
 
 // 更新key的数量
-exports.updateNum = function(cate,key,callback){
+exports.updateNum = function(category,keyname,callback){
   var client = connect.getConn();
   var statement = 'update cates set num = num+1 where key = "' + key + '" and cate = ' + cate;
+  client.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(client);
+};
+
+// 新增
+exports.addCate = function(category,keyname,callback){
+  var client = connect.getConn();
+  var num = 0;  // 初始数量为0
+  var statement = 'insert into cates (category,keyname,num) values ("' +
+          category + '","' +
+          keyname + '",' +
+          num + ')';
+  client.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(client);
+};
+
+// 删除
+exports.delCate = function (id,callback){
+  var client = connect.getConn();
+  var statement = 'delete from cates where id = '  + id;
   client.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });
