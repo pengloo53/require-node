@@ -76,4 +76,10 @@ router.post('/1', function(req,res,next){
   }
 });
 
+/* Delete message */
+router.post('/del/:id', function(req,res,next){
+  var id = req.params.id;
+
+});
+
 module.exports = router;
