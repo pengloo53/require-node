@@ -298,7 +298,7 @@
         removeIcon: '<i class="glyphicon glyphicon-trash text-danger"></i>',
         removeClass: 'btn btn-xs btn-default',
         removeTitle: 'Remove file',
-        uploadIcon: '<i class="glyphicon glyphicon-upload text-info"></i>',
+        uploadIcon: '<i class="glyphicon glyphicon-uploads text-info"></i>',
         uploadClass: 'btn btn-xs btn-default',
         uploadTitle: 'Upload file',
         zoomIcon: '<i class="glyphicon glyphicon-zoom-in"></i>',
@@ -318,17 +318,17 @@
         indicatorLoadingTitle: 'Uploading ...'
     };
     tMain1 = '{preview}\n' +
-        '<div class="kv-upload-progress hide"></div>\n' +
+        '<div class="kv-uploads-progress hide"></div>\n' +
         '<div class="input-group {class}">\n' +
         '   {caption}\n' +
         '   <div class="input-group-btn">\n' +
         '       {remove}\n' +
         '       {cancel}\n' +
-        '       {upload}\n' +
+        '       {uploads}\n' +
         '       {browse}\n' +
         '   </div>\n' +
         '</div>';
-    tMain2 = '{preview}\n<div class="kv-upload-progress hide"></div>\n{remove}\n{cancel}\n{upload}\n{browse}\n';
+    tMain2 = '{preview}\n<div class="kv-uploads-progress hide"></div>\n{remove}\n{cancel}\n{uploads}\n{browse}\n';
     tPreview = '<div class="file-preview {class}">\n' +
         '    {close}' +
         '    <div class="{dropClass}">\n' +
@@ -377,15 +377,15 @@
         '</div>';
     tActions = '<div class="file-actions">\n' +
         '    <div class="file-footer-buttons">\n' +
-        '        {upload} {delete} {zoom} {other}' +
+        '        {uploads} {delete} {zoom} {other}' +
         '    </div>\n' +
         '    {drag}\n' +
-        '    <div class="file-upload-indicator" title="{indicatorTitle}">{indicator}</div>\n' +
+        '    <div class="file-uploads-indicator" title="{indicatorTitle}">{indicator}</div>\n' +
         '    <div class="clearfix"></div>\n' +
         '</div>';
     //noinspection HtmlUnknownAttribute
     tActionDelete = '<button type="button" class="kv-file-remove {removeClass}" ' + 'title="{removeTitle}" {dataUrl}{dataKey}>{removeIcon}</button>\n';
-    tActionUpload = '<button type="button" class="kv-file-upload {uploadClass}" title="{uploadTitle}">' +
+    tActionUpload = '<button type="button" class="kv-file-uploads {uploadClass}" title="{uploadTitle}">' +
         '{uploadIcon}</button>';
     tActionZoom = '<button type="button" class="kv-file-zoom {zoomClass}" title="{zoomTitle}">{zoomIcon}</button>';
     tActionDrag = '<span class="file-drag-handle {dragClass}" title="{dragTitle}">{dragIcon}</span>';
@@ -670,8 +670,8 @@
                 self._refreshContainer();
             }
             self.$dropZone = self.$container.find('.file-drop-zone');
-            self.$progress = self.$container.find('.kv-upload-progress');
-            self.$btnUpload = self.$container.find('.fileinput-upload');
+            self.$progress = self.$container.find('.kv-uploads-progress');
+            self.$btnUpload = self.$container.find('.fileinput-uploads');
             self.$captionContainer = getElement(options, 'elCaptionContainer', self.$container.find('.file-caption'));
             self.$caption = getElement(options, 'elCaptionText', self.$container.find('.file-caption-name'));
             self.$previewContainer = getElement(options, 'elPreviewContainer', self.$container.find('.file-preview'));
@@ -938,7 +938,7 @@
             if (!self.isUploadable) {
                 handler($form, 'submit', $.proxy(self._submitForm, self));
             }
-            handler(self.$container.find('.fileinput-upload'), 'click', $.proxy(self._uploadClick, self));
+            handler(self.$container.find('.fileinput-uploads'), 'click', $.proxy(self._uploadClick, self));
             handler($(window), 'resize', function () {
                 self._listenFullScreen(screen.width === window.innerWidth && screen.height === window.innerHeight);
             });
@@ -1007,7 +1007,7 @@
             self.$dropZone.removeClass('file-highlighted');
         },
         _uploadClick: function (e) {
-            var self = this, $btn = self.$container.find('.fileinput-upload'), $form,
+            var self = this, $btn = self.$container.find('.fileinput-uploads'), $form,
                 isEnabled = !$btn.hasClass('disabled') && isEmpty($btn.attr('disabled'));
             if (e && e.isDefaultPrevented()) {
                 return;
@@ -1725,7 +1725,7 @@
             self.formdata = formdata;
             if (self.showPreview) {
                 $thumb = $('#' + previewId + ':not(.file-preview-initial)');
-                $btnUpload = $thumb.find('.kv-file-upload');
+                $btnUpload = $thumb.find('.kv-file-uploads');
                 $btnDelete = $thumb.find('.kv-file-remove');
                 $('#' + previewId).find('.file-thumb-progress').removeClass('hide');
             }
@@ -1860,7 +1860,7 @@
                 var outData = self._getOutData(jqXHR);
                 if (self.showPreview) {
                     self._getThumbs().each(function () {
-                        var $thumb = $(this), $btnUpload = $thumb.find('.kv-file-upload'),
+                        var $thumb = $(this), $btnUpload = $thumb.find('.kv-file-uploads'),
                             $btnDelete = $thumb.find('.kv-file-remove');
                         if (!$thumb.hasClass('file-preview-success')) {
                             self._setThumbStatus($thumb, 'Loading');
@@ -1885,8 +1885,8 @@
                     setAllUploaded();
                     if (self.showPreview) {
                         $thumbs.each(function () {
-                            var $thumb = $(this), $btnUpload = $thumb.find('.kv-file-upload');
-                            $thumb.find('.kv-file-upload').hide();
+                            var $thumb = $(this), $btnUpload = $thumb.find('.kv-file-uploads');
+                            $thumb.find('.kv-file-uploads').hide();
                             self._setThumbStatus($thumb, 'Success');
                             $thumb.removeClass('file-uploading');
                             $btnUpload.removeAttr('disabled');
@@ -1899,7 +1899,7 @@
                     if (self.showPreview) {
                         $thumbs.each(function () {
                             var $thumb = $(this), $btnDelete = $thumb.find('.kv-file-remove'),
-                                $btnUpload = $thumb.find('.kv-file-upload');
+                                $btnUpload = $thumb.find('.kv-file-uploads');
                             $thumb.removeClass('file-uploading');
                             $btnUpload.removeAttr('disabled');
                             $btnDelete.removeAttr('disabled');
@@ -1910,7 +1910,7 @@
                             if ($.inArray(key, keys) !== -1) {
                                 self._setPreviewError($thumb);
                             } else {
-                                $thumb.find('.kv-file-upload').hide();
+                                $thumb.find('.kv-file-uploads').hide();
                                 self._setThumbStatus($thumb, 'Success');
                                 self.updateStack(key, undefined);
                             }
@@ -1943,7 +1943,7 @@
                     }
                 });
                 self._getThumbs().removeClass('file-uploading');
-                self._getThumbs(' .kv-file-upload').removeAttr('disabled');
+                self._getThumbs(' .kv-file-uploads').removeAttr('disabled');
                 self._getThumbs(' .kv-file-delete').removeAttr('disabled');
             };
             $.each(files, function (key, data) {
@@ -2037,7 +2037,7 @@
                     });
                 });
             });
-            self.$preview.find('.kv-file-upload').each(function () {
+            self.$preview.find('.kv-file-uploads').each(function () {
                 var $el = $(this);
                 handler($el, 'click', function () {
                     var $frame = $el.closest('.file-preview-frame'),
@@ -2327,11 +2327,11 @@
             }
             var icon = 'indicator' + status, msg = icon + 'Title',
                 css = 'file-preview-' + status.toLowerCase(),
-                $indicator = $thumb.find('.file-upload-indicator'),
+                $indicator = $thumb.find('.file-uploads-indicator'),
                 config = self.fileActionSettings;
             $thumb.removeClass('file-preview-success file-preview-error file-preview-loading');
             if (status === 'Error') {
-                $thumb.find('.kv-file-upload').attr('disabled', true);
+                $thumb.find('.kv-file-uploads').attr('disabled', true);
             }
             if (status === 'Success') {
                 $thumb.find('.file-drag-handle').remove();
@@ -2923,7 +2923,7 @@
                 var $thumb = $(this), ind = $thumb.attr('data-fileindex');
                 $thumb.removeClass('file-uploading');
                 if (self.filestack[ind] !== undefined) {
-                    $thumb.find('.kv-file-upload').removeClass('disabled').removeAttr('disabled');
+                    $thumb.find('.kv-file-uploads').removeClass('disabled').removeAttr('disabled');
                     $thumb.find('.kv-file-remove').removeClass('disabled').removeAttr('disabled');
                 }
                 self.unlock();
@@ -2991,7 +2991,7 @@
             self._raise('filedisabled');
             self.$element.attr('disabled', 'disabled');
             self.$container.find(".kv-fileinput-caption").addClass("file-caption-disabled");
-            self.$container.find(".btn-file, .fileinput-remove, .fileinput-upload, .file-preview-frame button").attr(
+            self.$container.find(".btn-file, .fileinput-remove, .fileinput-uploads, .file-preview-frame button").attr(
                 "disabled",
                 true);
             self._initDragDrop();
@@ -3004,7 +3004,7 @@
             self.$element.removeAttr('disabled');
             self.$container.find(".kv-fileinput-caption").removeClass("file-caption-disabled");
             self.$container.find(
-                ".btn-file, .fileinput-remove, .fileinput-upload, .file-preview-frame button").removeAttr("disabled");
+                ".btn-file, .fileinput-remove, .fileinput-uploads, .file-preview-frame button").removeAttr("disabled");
             self._initDragDrop();
             return self.$element;
         },
@@ -3178,7 +3178,7 @@
         removeClass: 'btn btn-default',
         cancelIcon: '<i class="glyphicon glyphicon-ban-circle"></i>',
         cancelClass: 'btn btn-default',
-        uploadIcon: '<i class="glyphicon glyphicon-upload"></i>',
+        uploadIcon: '<i class="glyphicon glyphicon-uploads"></i>',
         uploadClass: 'btn btn-default',
         uploadUrl: null,
         uploadAsync: true,
@@ -3231,16 +3231,16 @@
         removeLabel: 'Remove',
         removeTitle: 'Clear selected files',
         cancelLabel: 'Cancel',
-        cancelTitle: 'Abort ongoing upload',
+        cancelTitle: 'Abort ongoing uploads',
         uploadLabel: 'Upload',
         uploadTitle: 'Upload selected files',
         msgNo: 'No',
         msgNoFilesSelected: 'No files selected',
         msgCancelled: 'Cancelled',
         msgZoomModalHeading: 'Detailed Preview',
-        msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>) exceeds maximum allowed upload size of <b>{maxSize} KB</b>.',
-        msgFilesTooLess: 'You must select at least <b>{n}</b> {files} to upload.',
-        msgFilesTooMany: 'Number of files selected for upload <b>({n})</b> exceeds maximum allowed limit of <b>{m}</b>.',
+        msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>) exceeds maximum allowed uploads size of <b>{maxSize} KB</b>.',
+        msgFilesTooLess: 'You must select at least <b>{n}</b> {files} to uploads.',
+        msgFilesTooMany: 'Number of files selected for uploads <b>({n})</b> exceeds maximum allowed limit of <b>{m}</b>.',
         msgFileNotFound: 'File "{name}" not found!',
         msgFileSecured: 'Security restrictions prevent reading the file "{name}".',
         msgFileNotReadable: 'File "{name}" is not readable.',
@@ -3248,7 +3248,7 @@
         msgFilePreviewError: 'An error occurred while reading the file "{name}".',
         msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
         msgInvalidFileExtension: 'Invalid extension for file "{name}". Only "{extensions}" files are supported.',
-        msgUploadAborted: 'The file upload was aborted',
+        msgUploadAborted: 'The file uploads was aborted',
         msgUploadThreshold: 'Processing...',
         msgValidationError: 'Validation Error',
         msgLoading: 'Loading file {index} of {files} &hellip;',

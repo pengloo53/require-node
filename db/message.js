@@ -3,17 +3,18 @@ var connect = require('./connect.js');
 
 /* ----------------BEGIN message------------------------- */
 // 添加message
-exports.addMessage = function(title,content,dept,time,user,status,callback){
+exports.addMessage = function(category,keyname,content,dept,time,user,status,image,callback){
   var conn = connect.getConn();
-  var statement = 'insert into message (title,content,dept,time,user,status) values (' + '"'
-      + title + '","'
+  var statement = 'insert into message (category,keyname,content,dept,time,user,status,image) values (' + '"'
+      + category + '","'
+      + keyname + '","'
       + content + '","'
       + dept + '","'
       + time + '","'
       + user + '",'
-      + status + ')';
+      + status + ',"'
+      + image + '")';
   conn.query(statement, function(errs,rows,fields){
-    console.log("errs: " + errs + '\trows: ' + rows + '\tfields: ' + fields);
     callback(errs,rows);
   });
   connect.endConn(conn);

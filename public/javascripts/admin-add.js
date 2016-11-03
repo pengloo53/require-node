@@ -24,7 +24,7 @@ window.onload = function(){
       '<div class="input-group {class}">\n' +
       '   <div class="input-group-btn">\n' +
       '       {browse}\n' +
-      // '       {upload}\n' +
+      // '       {uploads}\n' +
       '       {remove}\n' +
       '   </div>\n' +
       '   {caption}\n' +

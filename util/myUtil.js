@@ -2,10 +2,12 @@ exports.getTime = function(date){
   var year = date.getFullYear();
   var month = date.getMonth()+1;
   var day = date.getDate();
+  day = day<10?'0'+day:day;
   var hour = date.getHours();
   hour = hour<10?'0'+hour:hour;
   var minute = date.getMinutes();
   minute = minute<10?'0'+minute:minute;
+  var second = date.getSeconds();
   return year+'年'+month+'月'+day+'日 '+hour+':'+minute;
 };
 
@@ -16,4 +18,4 @@ exports.getIp = function(req){
   }else{
     return '127.0.0.1';
   }
-}
+};

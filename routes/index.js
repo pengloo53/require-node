@@ -4,6 +4,8 @@ var dbMessage = require('../db/message.js');
 var dbCates = require('../db/cates.js');
 var myUtil = require('../util/myUtil.js');
 var router = express.Router();
+var util = require('util');
+var upload = require('../util/multerUpload.js');
 
 /* 传输消息参数，获取add页面 */
 function getAddPage(res,message){
@@ -68,27 +70,34 @@ router.get('/add', function(req,res,next){
 });
 
 /*  add requirement. */
-router.post('/add', function(req,res,next){
-  var title = req.body.title.trim();
-  var content = req.body.content.trim();
+router.post('/add', upload.array('image'), function(req,res,next){
+  console.log(util.inspect(req.files));
+  console.log(util.inspect(req.body));
+  var category = req.body.cate;
+  var keyname = req.body.key;
+  var content = req.body.content.toString().trim();
   var dept = req.body.dept;
+  var image = [];
+  for(var i = 0 ; i< req.files.length; i ++){
+    image.push(req.files[i].filename);
+  }
   var user = myUtil.getIp(req);
   var time = myUtil.getTime(new Date());
   var status = 1;
-  console.log("..................................add message: %s,%s,%s,%s,%s,%d.",title,content,dept,user,time,status);
-  if(title && dept ){
-    dbMessage.addMessage(title,content,dept,time,user,status,function(errs,rows){
+  console.log("..................................add message: %s,%s,%s,%s,%s,%d.",category,keyname,content,dept,user,time,status);
+  if(keyname && content && dept ){
+    dbMessage.addMessage(category,keyname,content,dept,time,user,status,image,function(errs,rows){
       if(!errs){
         getAddPage(res,'添加成功');
       }else{
         res.render('err',{
           message: errs,
           error: errs
-        });
+        })
       }
     });
   }else{
-    getAddPage(res,'请填写内容');
+    getAddPage(res,'请填写完整');
   }
 });
 

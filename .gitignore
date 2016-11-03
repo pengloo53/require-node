@@ -34,3 +34,7 @@ node_modules
 
 # webstrom
 .idea/*
+
+# upload images
+public/images/uploads/**
+

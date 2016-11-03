@@ -7,11 +7,22 @@ a {
   color: #00B7FF;
 }
 
+/* index.ejs */
+.border-bottom{
+  border-bottom: 2px solid #ddd;
+  padding: 1em 0
+}
+.status{
+  margin-top: 3em;
+}
 
+/* add.ejs */
 #keys{
   padding-left: 1.4em;
 }
 
+
+/* admin.ejs */
 .black_overlay{
   display: none;
   position: absolute;

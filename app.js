@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session= require('express-session');
 var formidable = require('express-formidable');
 
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var admin = require('./routes/admin');
@@ -22,7 +23,9 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(multer());
 app.use(cookieParser());
+
 // app.use(formidable());
 
 // session config
