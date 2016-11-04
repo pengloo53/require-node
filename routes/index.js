@@ -29,8 +29,8 @@ function getAddPage(res,message){
 }
 
 /* 传输消息参数，获取首页 */
-function getIndexPage(res,message){
-  dbMessage.getAllMessages(function(errs,rows){
+function getIndexPage(res,message,pageCount){
+  dbMessage.getMessagesByPage(pageCount,function(errs,rows){
     dbCates.getAllCates(function(errs2,rows2){
       if(!errs && !errs2){
         res.render('index',{
@@ -61,7 +61,12 @@ router.get('/ajax/:cate', function(req,res,next){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  getIndexPage(res,'');
+  var pageCount = req.query.page;
+  if(pageCount){
+    getIndexPage(res,'',pageCount);
+  }else{
+    getIndexPage(res,'',pageCount);
+  }
 });
 
 /* GET add page. */

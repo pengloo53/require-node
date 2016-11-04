@@ -64,7 +64,7 @@ exports.replyMessage = function (id, reContent, reTime, reUser, status, callback
   connect.endConn(conn);
 };
 
-// 查询所有message
+/*// 查询所有message
 exports.getAllMessages = function (callback) {
   var conn = connect.getConn();
   var statement = 'select * from message order by id desc';
@@ -72,7 +72,7 @@ exports.getAllMessages = function (callback) {
     callback(errs, rows);
   });
   connect.endConn(conn);
-};
+};*/
 
 // 根据id获取message
 exports.getMessageById = function (id, callback) {
@@ -93,4 +93,14 @@ exports.getMessagesByStatus = function (status, callback) {
   });
   connect.endConn(conn);
 };
+
+// 分页获取Message信息
+exports.getMessagesByPage = function(page,callback){
+  var conn = connect.getConn();
+  var statement = 'select * from message order by id desc limit ' + page + ',30';
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+}
 /* ----------------END message------------------------- */
