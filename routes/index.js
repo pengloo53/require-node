@@ -13,7 +13,7 @@ function getAddPage(res,message){
     dbCates.getAllCates(function(errs2,rows2){
       dbCates.getkeysByCate('IT', function(errs3,rows3){
         if(!errs1 && !errs2 && !errs3) {
-          res.render('add', {
+          res.render('admin/add', {
             title: '添加需求',
             message: message,
             depts: rows1,
@@ -31,18 +31,18 @@ function getAddPage(res,message){
 /* 传输消息参数，获取首页 */
 function getIndexPage(res,message){
   dbMessage.getAllMessages(function(errs,rows){
-    if(errs){
-      res.render('err',{
-        message: errs,
-        error: errs
-      });
-    }else{
-      res.render('index',{
-        title: '需求首页',
-        message: message,
-        messages: rows
-      });
-    }
+    dbCates.getAllCates(function(errs2,rows2){
+      if(!errs && !errs2){
+        res.render('index',{
+          title: '需求首页',
+          message: message,
+          cates: rows2,
+          messages: rows
+        });
+      }else{
+        next();
+      }
+    });
   });
 }
 

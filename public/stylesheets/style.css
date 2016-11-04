@@ -12,8 +12,9 @@ a {
   border-bottom: 2px solid #ddd;
   padding: 1em 0
 }
-.status{
-  margin-top: 3em;
+#content{
+  margin-left: 1em;
+  font-size: 1.2em;
 }
 
 /* add.ejs */
