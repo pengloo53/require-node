@@ -16,6 +16,7 @@ exports.addMessage = function (category, keyname, title, content, dept, time, us
       + status + ',"'
       + image + '")';
   conn.query(statement, function (errs, rows, fields) {
+    console.log("errs: " + errs + '\nrows: ' + rows + '\nfields: ' + fields);
     callback(errs, rows);
   });
   connect.endConn(conn);
@@ -97,10 +98,10 @@ exports.getMessagesByStatus = function (status, callback) {
 // 分页获取Message信息
 exports.getMessagesByPage = function(page,callback){
   var conn = connect.getConn();
-  var statement = 'select * from message order by id desc limit ' + page + ',30';
+  var statement = 'select * from message order by id desc limit ' + page*30 + ',30';
   conn.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });
   connect.endConn(conn);
-}
+};
 /* ----------------END message------------------------- */

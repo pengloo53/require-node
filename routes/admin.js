@@ -65,11 +65,11 @@ router.post('/1', function(req,res,next){
   if(reContent){
     dbMessage.replyMessage(id,reContent,reTime,reUser,status,function(errs,rows){
       if(!errs){
-        getAdminPageByStatus(res,'回复成功',1)
+        getAdminPageByStatus(res,'回复成功',1);
       }else{
         res.render('err',{
           message: errs,
-          error: errs
+          error: errsß
         });
       }
     });

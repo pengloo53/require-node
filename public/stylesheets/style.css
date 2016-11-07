@@ -8,13 +8,53 @@ a {
 }
 
 /* index.ejs */
-.border-bottom{
-  border-bottom: 2px solid #ddd;
-  padding: 1em 0
-}
+
 #content{
   margin-left: 1em;
   font-size: 1.2em;
+}
+.message-list-item{
+  margin: 1.5em 0;
+  border-bottom: 1px solid #eee;
+}
+
+.message-list .qa-rank{
+  margin: 0 10px;
+  line-height: 1.2em;
+  text-align: center;
+  color: #fff;
+}
+
+.status,.answers,.views{
+  display: inline-block;
+  line-height: 2.5em;
+  width: 60px;
+  height: 40px;
+  border-radius: 3px;
+}
+
+.message-list .info{
+  font-size: 0.8em;
+  overflow: auto;
+  overflow-x: hidden;
+  margin-bottom: 5px;
+}
+
+.message-list .info a{
+  color: #999;
+}
+
+.message-list .title{
+  display: inline;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.message-list .keyname{
+  font-size: 0.8em;
+  display: inline-block;
+  margin-left: 10px;
 }
 
 /* add.ejs */

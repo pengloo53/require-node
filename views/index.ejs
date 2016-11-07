@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <!--    <script src="/javascripts/jquery.min.js"></script>
-        <script src="/bootstrap/js/bootstrap.min.js"></script>-->
+    <script src="/javascripts/jquery/dist/jquery.min.js"></script>
+    <script src="/javascripts/index.js"></script>
 </head>
 <body>
 <div class="container">
@@ -35,32 +35,50 @@
             </ul>
             <div class="message-list">
                 <% for (var i = 0; i < messages.length; i++){ %>
-                <div class="col-lg-6">
-                    <ul class="list-unstyled">
-                        <li>
-                            <div id='category' class="badge pull-left text-center"><%= messages[i].category %></div>
-                            <div id='content' class="pull-left"><%= messages[i].content %></div>
-                            <div id='status' class="pull-right">
-                                <% if (messages[i].status == 1){ %>
-                                <span class="label label-danger">已提交</span>
-                                <% }else if(messages[i].status == 2){ %>
-                                <span class="label label-primary">已解答</span>
-                                <% }else if(messages[i].status == 3){ %>
-                                <span class="label label-info">跟进中</span>
-                                <% }else if(messages[i].status == 4){ %>
-                                <span class="label label-success">已解决</span>
-                                <% } %>
-                            </div>
-                        </li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
+                  <section class="message-list-item">
+                    <div class="qa-rank pull-left">
+                        <% var status;
+                            switch(messages[i].status){
+                                case 1:
+                                    status = '已提交';
+                                    break;
+                                case 2:
+                                    status = '已解答';
+                                    break;
+                                case 3:
+                                    status = '跟进中';
+                                    break;
+                                case 4:
+                                    status = '已解决';
+                                    break;
+                                default:
+                                    status = '';
+                            }
+                        %>
+                      <div class="status"><%= status %></div>
+<!--                      <div class="answers"></div>
+                      <div class="views"></div>-->
+                    </div>
+                    <div class="mainContent">
+                      <ul class="info list-inline">
+                        <li><a href="#"><%= messages[i].dept %></a></li>
+                        <li><a href="#"><%= messages[i].time %></a></li>
+                      </ul>
+                      <p class="title "><%= messages[i].title %></p>
+                      <ul class="keyname list-inline">
+                        <% var keys = messages[i].keyname.split(',');
+                            for(var j=0; j<keys.length; j++){
+                        %>
+                          <li><a href="#" class="badge"><%= keys[j] %></a></li>
+                        <% } %>
+                      </ul>
+                    </div>
+                  </section>
                 <% } %>
             </div>
             <div class="text-center">
               <ul class="pagination">
-                <li><a href="/?page=1">1</a></li>
+                <li><a href="/">1</a></li>
                 <li><a href="/?page=2">2</a></li>
                 <li><a href="/?page=3">3</a></li>
                 <li><a href="#">&raquo;</a></li>
@@ -69,9 +87,9 @@
         </div>
         <div class="col-lg-3">
             <h3>其他展示</h3>
-            <img src="http://10.20.1.100/index/item-1.jpg" width=100% alt="">
+<!--            <img src="http://10.20.1.100/index/item-1.jpg" width=100% alt="">
             <img src="http://10.20.1.100/index/item-2.jpg" width=100% alt="">
-            <!--<img src="http://10.20.1.100/index/item-3.jpg" width=100% alt="">-->
+            <img src="http://10.20.1.100/index/item-3.jpg" width=100% alt="">-->
         </div>
     </div>
 </div>
