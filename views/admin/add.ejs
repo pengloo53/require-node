@@ -57,6 +57,7 @@
                     <div class="form-group">
                         <label for="dept">所在部门<strong class="text-danger">*</strong></label>
                         <select class="form-control" name="dept">
+                            <option></option>
                             <% for(var i=0; i < depts.length; i++){ %>
                             <option><%= depts[i].deptname %></option>
                             <% } %>

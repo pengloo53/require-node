@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="/javascripts/jquery/dist/jquery.min.js"></script>
+    <script src="/stylesheets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/javascripts/index.js"></script>
 </head>
 <body>
@@ -17,20 +18,27 @@
             <ol class="breadcrumb">
                 <li class="active">首页</li>
                 <li><a href="/add" class="">添加需求</a></li>
-                <!--<li><a href="/admin" class="btn btn-info btn-xs pull-right">管理员登陆</a></li>-->
+<!--                <li class="pull-right"><a href="/logout" class="btn btn-success btn-xs">登出</a></li>
+                <li class="pull-right"><a href="/login" class="btn btn-success btn-xs">登陆</a></li>-->
             </ol>
-
-            <!--<a href="/add" class="btn btn-primary btn-sm">添加需求</a>-->
-            <span class="label label-danger"><%= message %></span>
-            <!--<a href="/admin" class="btn btn-info btn-xs pull-right">管理员登陆</a>-->
         </p>
     </div>
     <div class="row">
         <div class="col-lg-9">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#">全部</a></li>
+              <li class="active">
+                <a href="/" type="button" class="dropdown-toggle">全部
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>已提交</li>
+                    <li>已解答</li>
+                    <li>跟进中</li>
+                    <li>已解决</li>
+                </ul>
+              </li>
                 <% for(var i=0; i< cates.length; i++){ %>
-                  <li><a href="#"><%= cates[i].cate %></a></li>
+                  <li class="category" id="<%= cates[i].cate %>"><a href="#"><%= cates[i].cate %></a></li>
                 <% } %>
             </ul>
             <div class="message-list">
@@ -75,14 +83,14 @@
                     </div>
                   </section>
                 <% } %>
-            </div>
-            <div class="text-center">
-              <ul class="pagination">
-                <li><a href="/">1</a></li>
-                <li><a href="/?page=2">2</a></li>
-                <li><a href="/?page=3">3</a></li>
-                <li><a href="#">&raquo;</a></li>
-              </ul>
+                <div class="text-center">
+                    <ul class="pagination">
+                      <li><a href="/">1</a></li>
+                      <li><a href="/?page=2">2</a></li>
+                      <li><a href="/?page=3">3</a></li>
+                      <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-lg-3">

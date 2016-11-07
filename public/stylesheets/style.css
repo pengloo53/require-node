@@ -9,27 +9,28 @@ a {
 
 /* index.ejs */
 
-#content{
-  margin-left: 1em;
-  font-size: 1.2em;
-}
 .message-list-item{
   margin: 1.5em 0;
   border-bottom: 1px solid #eee;
 }
 
-.message-list .qa-rank{
+.message-list-item .qa-rank{
   margin: 0 10px;
   line-height: 1.2em;
   text-align: center;
   color: #fff;
 }
 
+.message-list .mainContent{
+  overflow: auto;
+  overflow-x: hidden;
+}
+
 .status,.answers,.views{
   display: inline-block;
   line-height: 2.5em;
   width: 60px;
-  height: 40px;
+  height: 35px;
   border-radius: 3px;
 }
 
@@ -48,13 +49,23 @@ a {
   display: inline;
   font-size: 1.1em;
   font-weight: bold;
-  margin-left: 5px;
+/*   margin-left: 5px; */
 }
 
 .message-list .keyname{
   font-size: 0.8em;
   display: inline-block;
   margin-left: 10px;
+}
+
+.keyname li a:hover{
+  background-color: #00B7FF;
+}
+
+.dropdown-menu li{
+  padding-left: 30px;
+  line-height: 2em;
+  cursor: pointer;
 }
 
 /* add.ejs */

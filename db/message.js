@@ -65,8 +65,8 @@ exports.replyMessage = function (id, reContent, reTime, reUser, status, callback
   connect.endConn(conn);
 };
 
-/*// 查询所有message
-exports.getAllMessages = function (callback) {
+// 查询所有message
+/*exports.getAllMessages = function (callback) {
   var conn = connect.getConn();
   var statement = 'select * from message order by id desc';
   conn.query(statement, function (errs, rows, fields) {
@@ -85,20 +85,30 @@ exports.getMessageById = function (id, callback) {
   connect.endConn(conn);
 };
 
-// 获取status的所有message
-exports.getMessagesByStatus = function (status, callback) {
+// 分页获取所有message
+exports.getMessages = function (page, callback) {
   var conn = connect.getConn();
-  var statement = 'select * from message where status=' + status + ' order by id desc';
+  var statement = 'select * from message order by id desc limit ' + page*30 + ',30';
   conn.query(statement, function (errs, rows, fields) {
     callback(errs, rows);
   });
   connect.endConn(conn);
 };
 
-// 分页获取Message信息
-exports.getMessagesByPage = function(page,callback){
+// 按状态分页获取Message信息
+exports.getMessagesByStatus = function(page,status,callback){
   var conn = connect.getConn();
-  var statement = 'select * from message order by id desc limit ' + page*30 + ',30';
+  var statement = 'select * from message where status=' + status + ' order by id desc limit ' + page*30 + ',30';
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
+// 按类别分页获取Message信息
+exports.getMessagesByCate = function(page,cate,callback){
+  var conn = connect.getConn();
+  var statement = 'select * from message where category="' + cate + '" order by id desc limit ' + page*30 + ',30';
   conn.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });

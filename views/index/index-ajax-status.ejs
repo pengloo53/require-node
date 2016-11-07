@@ -1,0 +1,24 @@
+<!--<h4 class="alert"><%= subtitle %></h4>-->
+<% for (var i = 0; i < messages.length; i++){ %>
+<section class="message-list-item">
+    <div class="qa-rank pull-left">
+        <div class="status"><%= subtitle %></div>
+<!--        <div class="answers"></div>
+        <div class="views"></div>-->
+    </div>
+    <div class="mainContent">
+        <ul class="info list-inline">
+            <li><a href="#"><%= messages[i].dept %></a></li>
+            <li><a href="#"><%= messages[i].time %></a></li>
+        </ul>
+        <p class="title "><%= messages[i].title %></p>
+        <ul class="keyname list-inline">
+            <% var keys = messages[i].keyname.split(',');
+            for(var j = 0; j < keys.length; j++){
+            %>
+            <li><a href="#" class="badge"><%= keys[j] %></a></li>
+            <% } %>
+        </ul>
+    </div>
+</section>
+<% } %>
