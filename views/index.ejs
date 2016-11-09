@@ -1,105 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title><%= title %></title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="/javascripts/jquery/dist/jquery.min.js"></script>
-    <script src="/stylesheets/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/javascripts/index.js"></script>
-</head>
-<body>
-<div class="container">
-    <div class="row">
-        <h1><%= title %></h1>
-        <p class="lead">
-            <ol class="breadcrumb">
-                <li class="active">首页</li>
-                <li><a href="/add" class="">添加需求</a></li>
-<!--                <li class="pull-right"><a href="/logout" class="btn btn-success btn-xs">登出</a></li>
-                <li class="pull-right"><a href="/login" class="btn btn-success btn-xs">登陆</a></li>-->
-            </ol>
-        </p>
-    </div>
-    <div class="row">
-        <div class="col-lg-9">
-            <ul class="nav nav-tabs">
-              <li class="active">
-                <a href="/" type="button" class="dropdown-toggle">全部
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>已提交</li>
-                    <li>已解答</li>
-                    <li>跟进中</li>
-                    <li>已解决</li>
-                </ul>
-              </li>
-                <% for(var i=0; i< cates.length; i++){ %>
-                  <li class="category" id="<%= cates[i].cate %>"><a href="#"><%= cates[i].cate %></a></li>
-                <% } %>
-            </ul>
-            <div class="message-list">
-                <% for (var i = 0; i < messages.length; i++){ %>
-                  <section class="message-list-item">
-                    <div class="qa-rank pull-left">
-                        <% var status;
-                            switch(messages[i].status){
-                                case 1:
-                                    status = '已提交';
-                                    break;
-                                case 2:
-                                    status = '已解答';
-                                    break;
-                                case 3:
-                                    status = '跟进中';
-                                    break;
-                                case 4:
-                                    status = '已解决';
-                                    break;
-                                default:
-                                    status = '';
-                            }
-                        %>
-                      <div class="status"><%= status %></div>
-<!--                      <div class="answers"></div>
-                      <div class="views"></div>-->
-                    </div>
-                    <div class="mainContent">
-                      <ul class="info list-inline">
-                        <li><a href="#"><%= messages[i].dept %></a></li>
-                        <li><a href="#"><%= messages[i].time %></a></li>
-                      </ul>
-                      <p class="title "><%= messages[i].title %></p>
-                      <ul class="keyname list-inline">
-                        <% var keys = messages[i].keyname.split(',');
-                            for(var j=0; j<keys.length; j++){
-                        %>
-                          <li><a href="#" class="badge"><%= keys[j] %></a></li>
-                        <% } %>
-                      </ul>
-                    </div>
-                  </section>
-                <% } %>
-                <div class="text-center">
-                    <ul class="pagination">
-                      <li><a href="/">1</a></li>
-                      <li><a href="/?page=2">2</a></li>
-                      <li><a href="/?page=3">3</a></li>
-                      <li><a href="#">&raquo;</a></li>
-                    </ul>
-                </div>
+<% include index/index-layout-header.ejs %>
+<ul class="nav nav-tabs">
+    <span cate="<%= category %>"></span>
+    <li class="<% if (!category){%>active<%}%>">
+        <a href="/" type="button" class="dropdown-toggle" data-hover="dropdown">全部
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li>已提交</li>
+            <li>已解答</li>
+            <li>跟进中</li>
+            <li>已解决</li>
+        </ul>
+    </li>
+    <% for(var i = 0; i < cates.length; i++){ %>
+    <li class="category">
+        <a href="/cate/<%= cates[i].cate %>"><%= cates[i].cate %></a>
+    </li>
+    <% } %>
+</ul>
+<div class="col-lg-9">
+    <div class="message-list">
+        <% for (var i = 0; i < messages.length; i++){ %>
+        <section class="message-list-item">
+            <div class="qa-rank pull-left">
+                <% var status;
+                    switch (messages[i].status) {
+                        case 1:
+                            status = '已提交';
+                            break;
+                        case 2:
+                            status = '已解答';
+                            break;
+                        case 3:
+                            status = '跟进中';
+                            break;
+                        case 4:
+                            status = '已解决';
+                            break;
+                        default:
+                            status = '';
+                    }
+                %>
+                <div class="status"><%= status %></div>
+                <!--                      <div class="answers"></div>
+                                      <div class="views"></div>-->
             </div>
-        </div>
-        <div class="col-lg-3">
-            <h3>其他展示</h3>
-<!--            <img src="http://10.20.1.100/index/item-1.jpg" width=100% alt="">
-            <img src="http://10.20.1.100/index/item-2.jpg" width=100% alt="">
-            <img src="http://10.20.1.100/index/item-3.jpg" width=100% alt="">-->
-        </div>
+            <div class="mainContent">
+                <ul class="info list-inline">
+                    <li><a href="#"><%= messages[i].dept %></a></li>
+                    <li><a href="#"><%= messages[i].time %></a></li>
+                </ul>
+                <p class="title "><%= messages[i].title %></p>
+                <ul class="keyname list-inline">
+                    <% var keys = messages[i].keyname.split(',');
+                    for(var j = 0; j < keys.length; j++){
+                    %>
+                    <li><a href="#" class="badge"><%= keys[j] %></a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </section>
+        <% } %>
+    </div>
+    <div id="pagination" class="text-center">
+        <ul class="pagination">
+            <li><a href="/">1</a></li>
+            <li><a href="/?page=2">2</a></li>
+            <li><a href="/?page=3">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
     </div>
 </div>
-</body>
-</html>
+<% include index/index-layout-aside.ejs %>
+<% include index/index-layout-footer.ejs %>

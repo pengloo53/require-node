@@ -77,21 +77,7 @@ router.get('/status/:status', function (req, res, next) {
   });
 });
 
-/* GET Home by category */
-router.get('/cate/:cate', function (req, res, next) {
-  var cate = req.params.cate;
-  var page = req.query.page ? req.query.page : 0;
-  dbMessage.getMessagesByCate(page, cate, function (errs, rows) {
-    if (!errs) {
-      res.render('index/index-ajax-cate', {
-        category: cate,
-        messages: rows
-      });
-    } else {
-      next();
-    }
-  });
-});
+
 
 /* ----------------- END Ajax ----------------------*/
 
@@ -104,9 +90,30 @@ router.get('/', function (req, res, next) {
         res.render('index', {
           title: '需求首页',
           cates: rows2,
-          messages: rows
+          messages: rows,
+          category: null
         });
       } else {
+        next();
+      }
+    });
+  });
+});
+
+/* GET Home by category */
+router.get('/cate/:cate', function (req, res, next) {
+  var cate = req.params.cate;
+  var page = req.query.page ? req.query.page : 0;
+  dbMessage.getMessagesByCate(page, cate, function (errs, rows) {
+    dbCates.getAllCates(function(errs2,rows2){
+      if(!errs && !errs2){
+        res.render('index', {
+          title: '需求首页',
+          cates: rows2,
+          messages: rows,
+          category: cate
+        });
+      }else{
         next();
       }
     });
@@ -138,7 +145,7 @@ router.post('/add', upload.array('image'), function (req, res, next) {
   if (keyname && title && dept) {
     dbMessage.addMessage(category, keyname, title, content, dept, time, user, status, image, function (errs, rows) {
       if (!errs) {
-        res.redirect('index');
+        res.redirect('/');
       } else {
         res.render('err', {
           message: errs,
