@@ -1,5 +1,28 @@
-window.onload = function () {
+$(function () {
   colorStatus();
+
+  /* message-list-item 悬停颜色 */
+  $(".message-list-item").hover(function(){
+    $(this).css("background-color","#FFF9EB");
+  },function(){
+    $(this).css("background-color","#fff");
+  });
+
+  /* message-list-item 点击加载详细内容以及回复 */
+  $('.message-list-item').click(function(){
+    var mId = $(this).attr('mId') * 1;
+    if(!$('#'+ mId).children().length){
+      $.ajax({
+        url: "/ajax/others/" + mId, success: function (result) {
+          // alert(result);
+          $('#'+ mId).html(result);
+        }
+      });
+    }else{
+      $('#'+ mId).toggle();
+    }
+  });
+
 
   /* 下拉状态列表，悬停颜色变化 */
   /* 点击触发Ajax获取页面 */
@@ -42,6 +65,26 @@ window.onload = function () {
       break;
     }
   }
+
+  /* 分页激活 */
+  var page = $('#page').val();
+  var $page = $('ul.pagination li');
+  for(var j=0 ; j < $page.length; j++){
+    if($page[j].innerText == page){
+      $page[j].setAttribute('class','active');
+      break;
+    }
+  }
+  var count = $('#count').val();
+  if(count <= 20){
+    $('ul.pagination li a:contains(2)').removeAttr('href').parent().addClass('disabled');
+    $('ul.pagination li a:contains(3)').removeAttr('href').parent().addClass('disabled');
+    $('ul.pagination li a:last').removeAttr('href').parent().addClass('disabled');
+  }else if(count <= 40){
+    $('ul.pagination li a:contains(3)').removeAttr('href').parent().addClass('disabled');
+    $('ul.pagination li a:last').removeAttr('href').parent().addClass('disabled');
+  }
+
 
 
   /* function */
@@ -87,5 +130,5 @@ window.onload = function () {
     $(".status:contains(跟进中)").css("background-color", "#f0ad4e");
     $(".status:contains(已解决)").css("background-color", "#5cb85c");
   }
-};
+});
 

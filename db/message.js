@@ -1,5 +1,5 @@
 var connect = require('./connect.js');
-
+var config = require('./config.js');
 
 /* ----------------BEGIN message------------------------- */
 // 添加message
@@ -88,7 +88,7 @@ exports.getMessageById = function (id, callback) {
 // 分页获取所有message
 exports.getMessages = function (page, callback) {
   var conn = connect.getConn();
-  var statement = 'select * from message order by id desc limit ' + page*30 + ',30';
+  var statement = 'select * from message order by id desc limit ' + (page-1)*config.pageCount + ',' + config.pageCount;
   conn.query(statement, function (errs, rows, fields) {
     callback(errs, rows);
   });
@@ -98,7 +98,27 @@ exports.getMessages = function (page, callback) {
 // 按状态分页获取Message信息
 exports.getMessagesByStatus = function(page,status,callback){
   var conn = connect.getConn();
-  var statement = 'select * from message where status=' + status + ' order by id desc limit ' + page*30 + ',30';
+  var statement = 'select * from message where status=' + status + ' order by id desc limit ' + (page-1)*config.pageCount + ',' + config.pageCount;
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
+// 得到message的数量
+exports.getCountFromMessage = function(callback){
+  var conn = connect.getConn();
+  var statement = 'select count(*) count from message';
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
+// 得到分类message的数量
+exports.getCountFromMessageByCate = function(cate, callback){
+  var conn = connect.getConn();
+  var statement = 'select count(*) count from message where category="' + cate + '"';
   conn.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });
@@ -108,7 +128,7 @@ exports.getMessagesByStatus = function(page,status,callback){
 // 按类别分页获取Message信息
 exports.getMessagesByCate = function(page,cate,callback){
   var conn = connect.getConn();
-  var statement = 'select * from message where category="' + cate + '" order by id desc limit ' + page*30 + ',30';
+  var statement = 'select * from message where category="' + cate + '" order by id desc limit ' + (page-1)*config.pageCount + ',' + config.pageCount;
   conn.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });

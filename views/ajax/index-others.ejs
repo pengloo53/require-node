@@ -1,0 +1,16 @@
+<p class="content">
+    <% if(content == ''){ %>
+    <span class="text-danger">（无）</span>
+    <% }else{ %>
+    <%= content %>
+    <% } %>
+</p>
+<% if(images != ''){ %>
+<ul class="image list-inline">
+    <% for(var img = 0; img < images.length; img++){ %>
+    <li>
+        <a href="/images/uploads/<%= images[img] %>"><img src="/images/uploads/<%= images[img] %>" alt=""></a>
+    </li>
+    <% } %>
+</ul>
+<% } %>
