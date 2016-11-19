@@ -1,9 +1,14 @@
-window.onload = function(){
+$(function(){
   $("input:radio[name='cate']").change(function () {
-    var item = $("input[name='cate']:checked").val();
-    ajax_displayKeys(item);
+    var cate = $("input[name='cate']:checked").val();
+    $.ajax({
+      url: '/ajax/'+cate, async: true, success: function (result) {
+        $("#keys").html(result);
+      }
+    });
   });
 
+  // fileinput 插件
   $("#input-id").fileinput({
     showUpload: false,
     // showClose: false,
@@ -35,9 +40,9 @@ window.onload = function(){
       '</div>'
     }
   });
-};
+});
 
-
+/*
 function ajax_displayKeys(cate){
   // 第一步：获取对象
   var xmlhttp;
@@ -56,4 +61,4 @@ function ajax_displayKeys(cate){
   xmlhttp.open("GET",'/ajax/'+cate,true);
   // 第四步：发送请求
   xmlhttp.send();
-}
+}*/

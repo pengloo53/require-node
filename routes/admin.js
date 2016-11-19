@@ -5,7 +5,7 @@ var myUtil = require('../util/myUtil.js');
 var router = express.Router();
 
 // 传递消息，获取admin首页
-function getAdminPage(res,message){
+/*function getAdminPage(res,message){
   dbMessage.getAllMessages(function(errs,rows){
     if(errs){
       res.render('err',{
@@ -20,10 +20,10 @@ function getAdminPage(res,message){
       });
     }
   });
-}
+}*/
 
 // 传递信息，获取admin状态首页
-function getAdminPageByStatus(res,message,status){
+/*function getAdminPageByStatus(res,message,status){
   dbMessage.getMessagesByStatus(status, function(errs, rows){
     if(!errs){
       res.render('admin',{
@@ -38,11 +38,20 @@ function getAdminPageByStatus(res,message,status){
       });
     }
   });
-}
+}*/
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  getAdminPage(res, '');
+  var page = req.query.page?req.query.page:0;
+  dbMessage.getMessages(page,function(errs,rows){
+    if(!errs){
+      res.render('admin',{
+        title: '后台首页',
+        messages: rows,
+        message: ''
+      });
+    }
+  });
 });
 
 /* GET home page . distinct status: status=1 is no comment; status=2 is comment */

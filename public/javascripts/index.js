@@ -27,18 +27,24 @@ window.onload = function () {
   });
 
   /* 悬停显示下拉状态列表 */
-  /*  $("[data-hover]").hover(function(){
-   $("ul.dropdown-menu").show();
-   },function(){
-   $("ul.dropdown-menu").hidden();
-   });*/
+  $("[data-hover]").hover(function () {
+    $("ul.dropdown-menu").show(100);
+  });
+  $(".dropdown-menu").hover(function () {
+    $("ul.dropdown-menu").show(100);
+  }, function () {
+    $("ul.dropdown-menu").hide(100);
+  });
+  $(".dropdown-menu li").click(function(){
+    $("ul.dropdown-menu").hide(100);
+  });
 
   /* 导航激活 */
   var $activeLi = $('li.category');
   var cate = $("ul.nav span").attr('cate'); // 获取URL指定的类别
-  for (var i = 0 ; i < $activeLi.length ; i++){
+  for (var i = 0; i < $activeLi.length; i++) {
     if (cate == $activeLi[i].innerText) {
-      $activeLi[i].setAttribute('class','active');
+      $activeLi[i].setAttribute('class', 'active');
       break;
     }
   }
