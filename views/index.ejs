@@ -18,10 +18,11 @@
     </li>
     <% } %>
 </ul>
+<!--<p class="lead"></p>-->
 <div class="col-lg-9">
     <div class="message-list">
         <% for (var i = 0; i < messages.length; i++){ %>
-        <section class="message-list-item">
+        <section class="message-list-item" mId="<%= messages[i].id %>">
             <div class="qa-rank pull-left">
                 <% var status;
                     switch (messages[i].status) {
@@ -50,7 +51,7 @@
                     <li><a href="#"><%= messages[i].dept %></a></li>
                     <li><a href="#"><%= messages[i].time %></a></li>
                 </ul>
-                <p class="title "><%= messages[i].title %></p>
+                <p class="title "><a href="/message/<%= messages[i].id %>"><%= messages[i].title %></a></p>
                 <ul class="keyname list-inline">
                     <% var keys = messages[i].keyname.split(',');
                     for(var j = 0; j < keys.length; j++){
@@ -58,16 +59,28 @@
                     <li><a href="#" class="badge"><%= keys[j] %></a></li>
                     <% } %>
                 </ul>
+                <div id="<%= messages[i].id %>"></div>
             </div>
         </section>
         <% } %>
     </div>
     <div id="pagination" class="text-center">
         <ul class="pagination">
-            <li><a href="/">1</a></li>
-            <li><a href="/?page=2">2</a></li>
-            <li><a href="/?page=3">3</a></li>
-            <li><a href="#">&raquo;</a></li>
+            <input type="hidden" id="count" value="<%= count %>"></input>
+            <input type="hidden" id="page" value="<%= page %>">
+            <% if (!category) { %>
+                <li><a href="/">1</a></li>
+                <li><a href="/?page=2">2</a></li>
+                <li><a href="/?page=3">3</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="/?page=<%= page*1+1 %>">&raquo;</a></li>
+            <% }else{ %>
+                <li><a href="/cate/<%= category %>">1</a></li>
+                <li><a href="/cate/<%= category %>?page=2">2</a></li>
+                <li><a href="/cate/<%= category %>?page=3">3</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="/cate/<%= category %>?page=<%= page*1+1 %>">&raquo;</a></li>
+            <% } %>
         </ul>
     </div>
 </div>

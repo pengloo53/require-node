@@ -14,7 +14,7 @@ function getAddPage(res, message) {
     dbCates.getAllCates(function (errs2, rows2) {
       dbCates.getkeysByCate('IT', function (errs3, rows3) {
         if (!errs1 && !errs2 && !errs3) {
-          res.render('admin/add', {
+          res.render('add', {
             title: '添加需求',
             message: message,
             depts: rows1,
@@ -62,7 +62,7 @@ router.get('/ajax/:cate', function (req, res, next) {
 /* GET Home by status */
 router.get('/status/:status', function (req, res, next) {
   var status = req.params.status;
-  var page = req.query.page ? req.query.page : 0;
+  var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
   dbMessage.getMessagesByStatus(page, status, function (errs, rows) {
     if (!errs) {
       var subtitle = statusCovert.fromIdToComment(status * 1);
@@ -77,25 +77,44 @@ router.get('/status/:status', function (req, res, next) {
   });
 });
 
-
+router.get('/ajax/others/:id', function(req,res,next){
+  var id = req.params.id;
+  dbMessage.getMessageById(id,function(errs,rows){
+    if(!errs && rows){
+      var images = rows[0].image.split(',');
+      var content = rows[0].content;
+      res.render('ajax/index-others.ejs',{
+        content: content,
+        images: images
+      });
+    }else{
+      next();
+    }
+  });
+});
 
 /* ----------------- END Ajax ----------------------*/
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  var page = req.query.page ? req.query.page : 0;
+  var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
+  console.log(page);
   dbMessage.getMessages(page, function (errs, rows) {
     dbCates.getAllCates(function (errs2, rows2) {
-      if (!errs && !errs2) {
-        res.render('index', {
-          title: '需求首页',
-          cates: rows2,
-          messages: rows,
-          category: null
-        });
-      } else {
-        next();
-      }
+      dbMessage.getCountFromMessage(function (errs3, rows3) {
+        if (!errs && !errs2 && !errs3) {
+          res.render('index', {
+            title: '需求首页',
+            cates: rows2,
+            messages: rows,
+            category: null,
+            count: rows3[0].count,
+            page: page
+          });
+        } else {
+          next();
+        }
+      });
     });
   });
 });
@@ -103,19 +122,23 @@ router.get('/', function (req, res, next) {
 /* GET Home by category */
 router.get('/cate/:cate', function (req, res, next) {
   var cate = req.params.cate;
-  var page = req.query.page ? req.query.page : 0;
+  var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
   dbMessage.getMessagesByCate(page, cate, function (errs, rows) {
-    dbCates.getAllCates(function(errs2,rows2){
-      if(!errs && !errs2){
-        res.render('index', {
-          title: '需求首页',
-          cates: rows2,
-          messages: rows,
-          category: cate
-        });
-      }else{
-        next();
-      }
+    dbCates.getAllCates(function (errs2, rows2) {
+      dbMessage.getCountFromMessageByCate(cate, function (errs3, rows3) {
+        if (!errs && !errs2 && !errs3) {
+          res.render('index', {
+            title: '需求首页',
+            cates: rows2,
+            messages: rows,
+            category: cate,
+            count: rows3[0].count,
+            page: page
+          });
+        } else {
+          next();
+        }
+      });
     });
   });
 });

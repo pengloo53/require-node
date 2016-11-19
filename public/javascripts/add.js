@@ -1,14 +1,16 @@
-$(function(){
+$(function () {
+  /* 异步获取category对应的key*/
   $("input:radio[name='cate']").change(function () {
     var cate = $("input[name='cate']:checked").val();
     $.ajax({
-      url: '/ajax/'+cate, async: true, success: function (result) {
-        $("#keys").html(result);
+      url: '/ajax/' + cate, success: function (result) {
+        // alert(result);
+        $('#keys').html(result);
       }
     });
   });
 
-  // fileinput 插件
+  /* fileinput 样式 */
   $("#input-id").fileinput({
     showUpload: false,
     // showClose: false,
@@ -19,7 +21,7 @@ $(function(){
     browseLabel: '图片多选',
     browseClass: 'btn btn-default',
     allowedFileTypes: ['image'], // 限制文件类型为图片
-    allowedFileExtensions: ['jpg','png'], // 限制文件后缀名为jpg,png,gif
+    allowedFileExtensions: ['jpg', 'png'], // 限制文件后缀名为jpg,png,gif
     maxFileCount: 3,  // 限制最多3张图片
     maxFileSize: 1024, // 限制图片大小，最大1024KB
     allowedPreviewTypes: ['image'],
@@ -41,24 +43,3 @@ $(function(){
     }
   });
 });
-
-/*
-function ajax_displayKeys(cate){
-  // 第一步：获取对象
-  var xmlhttp;
-  if(window.XMLHttpRequest){
-    xmlhttp = new XMLHttpRequest();
-  }else{
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  // 第二步：监听状态变化并响应
-  xmlhttp.onreadystatechange = function(){
-    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-      document.getElementById("keys").innerHTML=xmlhttp.responseText;
-    }
-  };
-  // 第三步：设置请求
-  xmlhttp.open("GET",'/ajax/'+cate,true);
-  // 第四步：发送请求
-  xmlhttp.send();
-}*/
