@@ -9,8 +9,13 @@
 <ul class="image list-inline">
     <% for(var img = 0; img < images.length; img++){ %>
     <li>
-        <a href="/images/uploads/<%= images[img] %>"><img src="/images/uploads/<%= images[img] %>" alt=""></a>
+        <a href="/images/uploads/<%= images[img] %>" class="img-responsive"><img src="/images/uploads/<%= images[img] %>" alt=""></a>
     </li>
     <% } %>
 </ul>
+<% } %>
+<% if(reContent && reContent != ''){ %>
+<p class="reContent">
+    <span class="label label-success">回复：<%= reContent %></span>
+</p>
 <% } %>

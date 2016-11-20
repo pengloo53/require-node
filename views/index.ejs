@@ -1,28 +1,10 @@
 <% include index/index-layout-header.ejs %>
-<ul class="nav nav-tabs">
-    <span cate="<%= category %>"></span>
-    <li class="<% if (!category){%>active<%}%>">
-        <a href="/" type="button" class="dropdown-toggle" data-hover="dropdown">全部
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li>已提交</li>
-            <li>已解答</li>
-            <li>跟进中</li>
-            <li>已解决</li>
-        </ul>
-    </li>
-    <% for(var i = 0; i < cates.length; i++){ %>
-    <li class="category">
-        <a href="/cate/<%= cates[i].cate %>"><%= cates[i].cate %></a>
-    </li>
-    <% } %>
-</ul>
-<!--<p class="lead"></p>-->
+<% include index/index-layout-nav.ejs %>
+<div class="row">
 <div class="col-lg-9">
     <div class="message-list">
         <% for (var i = 0; i < messages.length; i++){ %>
-        <section class="message-list-item" mId="<%= messages[i].id %>">
+        <section class="message-list-item" mId="<%= messages[i].id %>" status="<%= messages[i].status %>">
             <div class="qa-rank pull-left">
                 <% var status;
                     switch (messages[i].status) {
@@ -51,7 +33,7 @@
                     <li><a href="#"><%= messages[i].dept %></a></li>
                     <li><a href="#"><%= messages[i].time %></a></li>
                 </ul>
-                <p class="title "><a href="/message/<%= messages[i].id %>"><%= messages[i].title %></a></p>
+                <p class="title "><a href="#"><%= messages[i].title %></a></p>
                 <ul class="keyname list-inline">
                     <% var keys = messages[i].keyname.split(',');
                     for(var j = 0; j < keys.length; j++){

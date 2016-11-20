@@ -8,8 +8,18 @@ a {
 }
 
 /* index.ejs */
+.breadcrumb{
+  margin:0;
+}
+.topnav{
+  background-color: #f5f5f5;
+}
+
+.message-list-item .image{
+  display: inline-block;
+}
 ul.image img{
-  width: 20px;
+  width: 100%;
 }
 
 .message-list-item{
@@ -28,6 +38,7 @@ ul.image img{
 .message-list .mainContent{
   overflow: auto;
   overflow-x: hidden;
+  padding-bottom: 0.8em;
 }
 
 .status,.answers,.views{
@@ -57,11 +68,19 @@ ul.image img{
 /*   margin-left: 5px; */
 }
 
-.message-list .title a{
+.message-list-item .content{
+  display: inline;
+}
+
+.message-list-item .reContent{
+  margin-top: 0.8em;
+}
+
+.message-list-item .title a{
   color: #333;
 }
 
-.message-list .keyname{
+.message-list-item .keyname{
   font-size: 0.8em;
   display: inline-block;
   margin-left: 10px;
@@ -70,16 +89,21 @@ ul.image img{
 .keyname li a:hover{
   background-color: #00B7FF;
 }
-
+/*
 .dropdown-menu li{
   padding-left: 30px;
   line-height: 2em;
   cursor: pointer;
-}
+}*/
 
 /* add.ejs */
 #keys{
   padding-left: 1.4em;
+}
+
+h1 small{
+  margin-left: 1em;
+  font-size: 0.4em;
 }
 
 

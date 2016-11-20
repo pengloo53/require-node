@@ -10,9 +10,22 @@
     <script src="/javascripts/admin.js"></script>
 </head>
 <body>
+<div class="topnav">
+    <div class="container">
+        <ul class="breadcrumb text-right">
+            您好，
+            <li>鲁鹏</li>
+            <li><a href="/login"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+        </ul>
+    </div>
+</div>
 <div class="container">
-    <h1><%= title %></h1>
-    <p class="lead"></p>
+    <div class="row">
+        <h1><a href="/admin"><img src="/images/index/logo.png" alt="B1信管部"></a>
+            <small class="glyphicon glyphicon-minus"></small><small><%= title %></small>
+        </h1>
+        <p class="lead"></p>
+    </div>
     <div class="row">
         <div class="nav nav-tabs">
             <li class="active"><a href="/admin">首页</a></li>
@@ -21,84 +34,79 @@
             <li><a href="#">其他</a></li>
         </div>
         <p class="lead"></p>
-        <div class="btn-group btn-group-sm">
+        <div class="btn-group">
             <a href="/admin" type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">全部状态
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li>已提交</li>
-                <li>已解答</li>
-                <li>跟进中</li>
-                <li>已解决</li>
+                <li><a href="">已提交</a></li>
+                <li><a href="">已解答</a></li>
+                <li><a href="">跟进中</a></li>
+                <li><a href="">已解决</a></li>
+                <li class="divider"></li>
+                <li><a href="">全部显示</a></li>
             </ul>
         </div>
         <span class="label label-danger" id="alert"><%= message %></span>
         <p class="lead"></p>
-        <!--<button class="btn btn-primary btn-sm">一键生成关键词</button>-->
     </div>
     <div class="row">
-        <% for(var i = 0 ; i < messages.length; i++){ %>
-        <div class="col-lg-4" id="<%= messages[i].id %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <strong class="text-info">标题：</strong>
-                        <%= messages[i].title %>
-                    </h3>
-                    <% if (messages[i].status == 1) { %>
-                    <label class="label label-danger pull-right">未回复</label>
-                    <% }else{ %>
-                    <label class="label label-success pull-right">已回复</label>
-                    <% } %>
-                </div>
-                <div class="panel-body">
-                    <strong class="text-info">描述：</strong>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>状态</th>
+                <th>分类</th>
+                <!--<th>关键词</th>-->
+                <th>部门</th>
+                <th>主题</th>
+                <th>内容</th>
+                <!--<th>用户</th>-->
+                <th>时间</th>
+                <!--<th>数量</th>-->
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i = 0 ; i < messages.length; i++){ %>
+            <tr status="<%= messages[i].status %>">
+                <td><%= messages[i].status %></td>
+                <td><%= messages[i].category %></td>
+                <td><%= messages[i].dept %></td>
+                <td>
+                    <p class="title "><%= messages[i].title %></p>
+                    <ul class="keyname list-inline">
+                        <% var keys = messages[i].keyname.split(',');
+                        for(var j = 0; j < keys.length; j++){
+                        %>
+                        <li><a href="#" class="badge"><%= keys[j] %></a></li>
+                        <% } %>
+                    </ul>
+                </td>
+                <td>
                     <%= messages[i].content %>
-                </div>
-                <ul class="list-group">
-                    <!--<li class="list-group-item">
-                        <strong class="text-info">关键词：</strong>
-                        <span class="label label-danger">电脑</span>
-                        <span class="label label-danger">内存</span>
-                    </li>-->
-                </ul>
-                <div class="panel-footer">
-                    <form action="/admin/1" method="post" class="form-inline" role="form">
-                        <!--<input type="text" class="form-control" placeholder="输入关键词">-->
-                        <input type="hidden" name="id" value="<%= messages[i].id %>">
-                        <div class="form-group">
-                            <textarea class="form-control" rows="1" name="reContent" placeholder="回复内容"
-                                    <% if(messages[i].status != 1){ %>
-                                      disabled
-                                    <% } %>
-                            ><%= messages[i].reContent %></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="btn-group btn-group-xs">
-                                <% if(messages[i].status == 1){ %>
-                                <input type="submit" class="btn btn-primary" value="回复">
-                                <% } %>
-                                <a href="/admin/edit/<%= messages[i].id %>" class="btn btn-success">更改</a>
-                                <a onclick="openWindow(<%= messages[i].id %>)" class="btn btn-danger">删除</a>
-                            </div>
-                        </div>
-                    </form>
-                    <small class="label label-default pull-left"><%= messages[i].time %></small>
-                    <small class="label label-default pull-right"><%= messages[i].dept %></small>
-                </div>
-            </div>
-        </div><!-- col -->
-        <% } %>
+                </td>
+                <!--<td><%= messages[i].user %></td>-->
+                <td><%= messages[i].time %></td>
+                <!--<td><%= messages[i].num %></td>-->
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown">
+                            操作
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href=""><span class="glyphicon glyphicon-eye-open"></span> 查看</a></li>
+                            <li><a href=""><span class="glyphicon glyphicon-edit"></span> 回复</a></li>
+                            <li><a href=""><span class="glyphicon glyphicon-pencil"></span> 更改</a></li>
+                            <li><a href=""><span class="glyphicon glyphicon-trash"></span> 删除</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
     </div><!-- row -->
 </div><!-- container -->
 </body>
-<!-- BEGIN 弹出层 -->
-<div id="light" class="white_content">
-    <h1>确定删除吗？</h1>
-    <button class="btn btn-danger" onclick="delMessage()">删除</button>
-    <button class="btn btn-info" onclick="closeWindow()">我在想想...</button>
-</div>
-<div id="fade" class="black_overlay"></div>
-<!-- END 弹出层 -->
-<script src="/javascripts/delMessage.js"></script>
 </html>

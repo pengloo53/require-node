@@ -1,79 +1,59 @@
-<html>
-<head>
-    <title><%= title %></title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="/stylesheets/bootstrap-fileinput/css/fileinput.min.css">
-    <script src="/javascripts/jquery/dist/jquery.js"></script>
-
-
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <h1><%= title %><small></small></h1>
-            <p class="lead">
-                <ol class="breadcrumb">
-                    <li><a href="/" class="">首页</a></li>
-                    <li class="active">添加需求</li>
-                    <!--<li><a href="/admin" class="btn btn-info btn-xs pull-right">管理员登陆</a></li>-->
-                </ol>
-            </p>
-
-            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-                <form action="/add" method="post" role="form" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="title">需求类型<strong class="text-danger">*</strong></label>
-                        <% for (var i=0; i< cates.length; i++){ %>
-                            <label class="checkbox-inline">
-                                <input type="radio" name="cate" id="cate" value="<%= cates[i].cate %>" <% if(cates[i].cate == 'IT'){%>checked<%}%>>
-                                <span class="label label-danger text-center"><%= cates[i].cate %></span>
-                            </label>
+<% include index/index-layout-header.ejs %>
+<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+    <form action="/add" method="post" role="form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">需求类型<strong class="text-danger">*</strong></label>
+            <% for (var i = 0; i < cates.length; i++){ %>
+            <label class="checkbox-inline">
+                <input type="radio" name="cate" id="cate" value="<%= cates[i].cate %>"
+                       <% if(cates[i].cate == 'IT'){ %>checked
                         <% } %>
-                    </div>
-                    <div class="form-group">
-                        <label for="cate-keys">详细分类<strong class="text-danger">*</strong></label>
-                        <span id="keys">
-                            <% for (var i = 0 ; i< keys.length; i++){ %>
-                            <input type="checkbox" name='key' value="<%= keys[i].keyname %>">
-                            <span class="badge"><%= keys[i].keyname %></span>
-                            <% }%>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="title">标题<strong class="text-danger">*</strong></label>
-                        <input class="form-control" name="title" placeholder="一句话描述你的问题">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="content">描述</label>
-                        <textarea class="form-control" rows="3" name="content" placeholder="详细描述问题，必要时附图说明"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <input name='image' id="input-id" type="file" class="file-actions" data-preview-file-type="text" multiple>
-                    </div>
-                    <div class="form-group">
-                        <label for="dept">所在部门<strong class="text-danger">*</strong></label>
-                        <select class="form-control" name="dept">
-                            <option></option>
-                            <% for(var i=0; i < depts.length; i++){ %>
-                            <option><%= depts[i].deptname %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-primary" name="submit" onclick="check()">提交</button>
-                        <span class="label label-danger"><%= message %></span>
-                    </div>
-                </form>
-            </div>
-            <div class="col-lg-4">
-
-            </div>
+                >
+                <span class="label label-danger text-center"><%= cates[i].cate %></span>
+            </label>
+            <% } %>
         </div>
-    </div>
+        <div class="form-group">
+            <label for="cate-keys">详细分类<strong class="text-danger">*</strong></label>
+            <span id="keys">
+                <% for (var i = 0 ; i < keys.length; i++){ %>
+                <input type="checkbox" name='key' value="<%= keys[i].keyname %>">
+                            <span class="badge"><%= keys[i].keyname %></span>
+                <% } %>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="title">标题<strong class="text-danger">*</strong></label>
+            <input class="form-control" name="title" placeholder="一句话描述你的问题">
+
+        </div>
+        <div class="form-group">
+            <label for="content">描述</label>
+            <textarea class="form-control" rows="3" name="content" placeholder="详细描述问题，必要时附图说明"></textarea>
+        </div>
+        <div class="form-group">
+            <input name='image' id="input-id" type="file" class="file-actions" data-preview-file-type="text" multiple>
+        </div>
+        <div class="form-group">
+            <label for="dept">所在部门<strong class="text-danger">*</strong></label>
+            <select class="form-control" name="dept">
+                <option></option>
+                <% for(var i = 0; i < depts.length; i++){ %>
+                <option><%= depts[i].deptname %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-primary" name="submit" onclick="check()">提交</button>
+            <span class="label label-danger"><%= message %></span>
+        </div>
+    </form>
+</div>
+<div class="col-lg-4">
+
+</div>
+</div>
+</div>
 <footer>
     <script src="/stylesheets/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="/stylesheets/bootstrap-fileinput/js/locales/zh.js"></script>

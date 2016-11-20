@@ -1,53 +1,56 @@
 $(function(){
-  // 下拉状态列表颜色
-  $(".dropdown-menu li").hover(function(){
+  /* 下拉状态列表，悬停颜色变化 */
+  /* 点击触发Ajax获取页面 */
+  $(".dropdown-menu li").hover(function () {
     var statusComment = $(this).text();
     switch (statusComment) {
       case '已提交':
-        $(this).css("background-color", "#d9534f");
+        $(this).find('a').css("background-color", "#d9534f");
         break;
       case '已解答':
-        $(this).css("background-color", "#337ab7");
+        $(this).find('a').css("background-color", "#337ab7");
         break;
       case '跟进中':
-        $(this).css("background-color", "#f0ad4e");
+        $(this).find('a').css("background-color", "#f0ad4e");
         break;
       case '已解决':
-        $(this).css("background-color", "#5cb85c");
+        $(this).find('a').css("background-color", "#5cb85c");
         break;
     }
-  },function(){
-    $(this).css("background-color", "#ffffff");
-  });
-
-  // 下拉状态列表ajax请求数据
-  $(".dropdown-menu li").click(function(){
+  }, function () {
     var statusComment = $(this).text();
-    var status = 0;
-    switch(statusComment){
-      case '已提交':
-        status = 1;
-        break;
-      case '已解答':
-        status = 2;
-        break;
-      case '跟进中':
-        status = 3;
-        break;
-      case '已解决':
-        status = 4;
-        break;
+    if(statusComment != ''){
+      $(this).find('a').css("background-color", "#ffffff");
     }
-    // ajaxGetStatusPage(status);
+  }).click(function () {
+    var statusComment = $(this).text();
+    var status = covertStatus(statusComment);
+    if($(this).text() == '全部显示'){
+      $('tbody tr:hidden').show(500);
+    }else{
+      $('tbody tr[status!="'+status+'"]').hide();
+      $('tbody tr[status="'+status+'"]').show();
+    }
+    $(this).parent().parent().removeClass('open');
+    return false;
   });
 
-/*  function ajaxGetStatusPage(status){
-    var statusId = status * 1;
-    $.ajax({
-      url: "/status/" + status, async: false, success: function (result) {
-        $(".message-list").html(result);
-      }
-    });
-  }*/
+  /* function */
+  function covertStatus(statusComment) {
+    switch (statusComment) {
+      case '已提交':
+        return 1;
+        break;
+      case '已解答':
+        return 2;
+        break;
+      case '跟进中':
+        return 3;
+        break;
+      case '已解决':
+        return 4;
+        break;
+    }
+  }
 
 });

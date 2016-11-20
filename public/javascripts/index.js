@@ -30,36 +30,34 @@ $(function () {
     var statusComment = $(this).text();
     switch (statusComment) {
       case '已提交':
-        $(this).css("background-color", "#d9534f");
+        $(this).find('a').css("background-color", "#d9534f");
         break;
       case '已解答':
-        $(this).css("background-color", "#337ab7");
+        $(this).find('a').css("background-color", "#337ab7");
         break;
       case '跟进中':
-        $(this).css("background-color", "#f0ad4e");
+        $(this).find('a').css("background-color", "#f0ad4e");
         break;
       case '已解决':
-        $(this).css("background-color", "#5cb85c");
+        $(this).find('a').css("background-color", "#5cb85c");
         break;
     }
   }, function () {
-    $(this).css("background-color", "#ffffff");
+    var statusComment = $(this).text();
+    if(statusComment != ''){
+      $(this).find('a').css("background-color", "#ffffff");
+    }
   }).click(function () {
-    ajaxGetStatusPage(covertStatus($(this).text()));
-    $("ul.dropdown-menu").parent().removeClass('open');
-  });
-
-  /* 悬停显示下拉状态列表 */
-  $("[data-hover]").hover(function () {
-    $("ul.dropdown-menu").show(100);
-  });
-  $(".dropdown-menu").hover(function () {
-    $("ul.dropdown-menu").show(100);
-  }, function () {
-    $("ul.dropdown-menu").hide(100);
-  });
-  $(".dropdown-menu li").click(function(){
-    $("ul.dropdown-menu").hide(100);
+    var statusComment = $(this).text();
+    var status = covertStatus(statusComment);
+    if($(this).text() == '全部显示'){
+      $('.message-list-item:hidden').show(500);
+    }else{
+      $('.message-list-item[status!="'+status+'"]').hide(500);
+      $('.message-list-item[status="'+status+'"]').show(500);
+    }
+    $(this).parent().parent().removeClass('open');
+    return false;
   });
 
   /* 导航激活 */
@@ -111,7 +109,7 @@ $(function () {
     }
   }
 
-  function ajaxGetStatusPage(status) {
+/*  function ajaxGetStatusPage(status) {
     var statusId = status * 1;
     $.ajax({
       url: "/status/" + status, async: false, success: function (result) {
@@ -128,7 +126,7 @@ $(function () {
         colorStatus();
       }
     });
-  }
+  }*/
 
   function colorStatus() {
     $(".status:contains(已提交)").css("background-color", "#d9534f");

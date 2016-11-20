@@ -52,7 +52,7 @@ function getAddPage(res, message) {
 router.get('/ajax/:cate', function (req, res, next) {
   var cate = req.params.cate;
   dbCates.getkeysByCate(cate, function (errs, rows) {
-    res.render('ajax/add_keys', {
+    res.render('index/ajax-add-keys', {
       cate: cate,
       keys: rows
     });
@@ -83,9 +83,11 @@ router.get('/ajax/others/:id', function(req,res,next){
     if(!errs && rows){
       var images = rows[0].image.split(',');
       var content = rows[0].content;
-      res.render('ajax/index-others.ejs',{
+      var reContent = rows[0].reContent;
+      res.render('index/ajax-index-others.ejs',{
         content: content,
-        images: images
+        images: images,
+        reContent: reContent
       });
     }else{
       next();

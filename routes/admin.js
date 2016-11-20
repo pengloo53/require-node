@@ -42,7 +42,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var page = req.query.page?req.query.page:0;
+  var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
   dbMessage.getMessages(page,function(errs,rows){
     if(!errs){
       res.render('admin',{
@@ -78,7 +78,7 @@ router.post('/1', function(req,res,next){
       }else{
         res.render('err',{
           message: errs,
-          error: errsß
+          error: errs
         });
       }
     });

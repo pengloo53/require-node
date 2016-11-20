@@ -1,0 +1,27 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <span cate="<%= category %>"></span>
+        <li class="<% if (!category){ %>active<% } %>">
+            <a href="/">全部</a>
+        </li>
+        <% for(var i = 0; i < cates.length; i++){ %>
+        <li class="category">
+            <a href="/cate/<%= cates[i].cate %>"><%= cates[i].cate %></a>
+        </li>
+        <% } %>
+    </ul>
+    <p class="lead"></p>
+    <div class="btn-group btn-group-sm">
+        <a href="/admin" type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">全部状态
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="">已提交</a></li>
+            <li><a href="">已解答</a></li>
+            <li><a href="">跟进中</a></li>
+            <li><a href="">已解决</a></li>
+            <li class="divider"></li>
+            <li><a href="">全部显示</a></li>
+        </ul>
+    </div>
+</div>
