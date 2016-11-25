@@ -95,6 +95,16 @@ exports.getMessages = function (page, callback) {
   connect.endConn(conn);
 };
 
+// 按偏移和总数获取message
+exports.getMessagesByOffset = function(offset, limit, order,name, callback){
+  var conn = connect.getConn();
+  var statement = 'select * from (select * from message order by id desc limit ' + offset + ',' + limit + ') a order by a.' + name + ' ' + order;
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
 // 按状态分页获取Message信息
 exports.getMessagesByStatus = function(page,status,callback){
   var conn = connect.getConn();

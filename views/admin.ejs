@@ -8,6 +8,10 @@
     <script src="/javascripts/jquery/dist/jquery.min.js"></script>
     <script src="/stylesheets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/javascripts/admin.js"></script>
+
+    <link rel="stylesheet"
+          href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" href="/stylesheets/bootstrap-table/dist/bootstrap-table.css">
 </head>
 <body>
 <div class="topnav">
@@ -22,7 +26,8 @@
 <div class="container">
     <div class="row">
         <h1><a href="/admin"><img src="/images/index/logo.png" alt="B1信管部"></a>
-            <small class="glyphicon glyphicon-minus"></small><small><%= title %></small>
+            <small class="glyphicon glyphicon-minus"></small>
+            <small><%= title %></small>
         </h1>
         <p class="lead"></p>
     </div>
@@ -33,8 +38,8 @@
             <li><a href="#">关键词</a></li>
             <li><a href="#">其他</a></li>
         </div>
-        <p class="lead"></p>
-        <div class="btn-group">
+        <!-- <p class="lead"></p> -->
+        <!--         <div class="btn-group">
             <a href="/admin" type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">全部状态
                 <span class="caret"></span>
             </a>
@@ -46,67 +51,346 @@
                 <li class="divider"></li>
                 <li><a href="">全部显示</a></li>
             </ul>
-        </div>
-        <span class="label label-danger" id="alert"><%= message %></span>
-        <p class="lead"></p>
+        </div> -->
     </div>
     <div class="row">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>状态</th>
-                <th>分类</th>
-                <!--<th>关键词</th>-->
-                <th>部门</th>
-                <th>主题</th>
-                <th>内容</th>
-                <!--<th>用户</th>-->
-                <th>时间</th>
-                <!--<th>数量</th>-->
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for(var i = 0 ; i < messages.length; i++){ %>
-            <tr status="<%= messages[i].status %>">
-                <td><%= messages[i].status %></td>
-                <td><%= messages[i].category %></td>
-                <td><%= messages[i].dept %></td>
-                <td>
-                    <p class="title "><%= messages[i].title %></p>
-                    <ul class="keyname list-inline">
-                        <% var keys = messages[i].keyname.split(',');
-                        for(var j = 0; j < keys.length; j++){
-                        %>
-                        <li><a href="#" class="badge"><%= keys[j] %></a></li>
-                        <% } %>
-                    </ul>
-                </td>
-                <td>
-                    <%= messages[i].content %>
-                </td>
-                <!--<td><%= messages[i].user %></td>-->
-                <td><%= messages[i].time %></td>
-                <!--<td><%= messages[i].num %></td>-->
-                <td>
-                    <div class="btn-group">
-                        <button type="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown">
-                            操作
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href=""><span class="glyphicon glyphicon-eye-open"></span> 查看</a></li>
-                            <li><a href=""><span class="glyphicon glyphicon-edit"></span> 回复</a></li>
-                            <li><a href=""><span class="glyphicon glyphicon-pencil"></span> 更改</a></li>
-                            <li><a href=""><span class="glyphicon glyphicon-trash"></span> 删除</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
+        <div id="toolbar">
+            <button id="remove" class="btn btn-danger" disabled>
+                <i class="glyphicon glyphicon-remove"></i> Delete
+            </button>
+        </div>
+        <table id="table"></table>
     </div><!-- row -->
 </div><!-- container -->
+<script>
+  var $table = $('#table'),
+      $remove = $('#remove'),
+      selections = [];
+  function initTable() {
+    $table.bootstrapTable({
+      toolbar: '#toolbar',
+      search: false,
+      showRefresh: true,
+      showToggle: true,
+      showColumns: true,
+      showExport: true,
+      detailView: true,
+      detailFormatter: detailFormatter,
+      minimumCountColumns: 3,
+      showPaginationSwitch: true,
+      pagination: true,
+      idField: 'id',
+      sortOrder: 'desc',
+      sortName: 'id',
+      pageList: '[10, 25, 50, 100, ALL]',
+      sidePagination: 'server',
+      url: "/admin/data/message",
+      responseHandle: responseHandler,
+      height: 550,
+      columns: [
+        {
+          field: 'state',
+          checkbox: true,
+          valign: 'middle',
+          align: 'center'
+        }, {
+          title: '#',
+          field: 'id',
+          align: 'center',
+          visible: true,
+          valign: 'middle',
+          sortable: true
+          // footerFormatter: totalTextFormatter
+        }, {
+          field: 'status',
+          title: '状态',
+          valign: 'middle',
+          align: 'center',
+          sortable: true,
+          formatter: convertStatusFormatter
+        }, {
+          field: 'category',
+          title: '分类',
+          sortable: true,
+          valign: 'middle',
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'keyname',
+          title: '关键词',
+          valign: 'middle',
+          align: 'left',
+          formatter: keyFormatter
+        }, {
+          field: 'title',
+          title: '主题',
+          sortable: false,
+          valign: 'middle',
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'content',
+          title: '内容',
+          sortable: false,
+          valign: 'middle',
+          visible: false,
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'dept',
+          title: '部门',
+          sortable: false,
+          valign: 'middle',
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'reContent',
+          title: '回复内容',
+          sortable: false,
+          valign: 'middle',
+          visible: false,
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'time',
+          title: '时间',
+          sortable: true,
+          valign: 'middle',
+          visible: false,
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'user',
+          title: '用户',
+          sortable: false,
+          valign: 'middle',
+          visible: false,
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'upNum',
+          title: '数量',
+          sortable: true,
+          valign: 'middle',
+          visible: true,
+          footerFormatter: totalNameFormatter,
+          align: 'center'
+        }, {
+          field: 'operate',
+          title: '操作',
+          align: 'center',
+          valign: 'middle',
+          events: operateEvents,
+          formatter: operateFormatter
+        }
+      ]
+    });
+      /* status convert to comments */
+    function convertStatusFormatter(data) {
+      var comments = '';
+      switch (data) {
+        case 1:
+          comments = '<label class="label label-danger">已提交</label>';
+          break;
+        case 2:
+          comments = '<label class="label label-primary">已解答</label>';
+          break;
+        case 3:
+          comments = '<label class="label label-warning">跟进中</label>';
+          break;
+        case 4:
+          comments = '<label class="label label-success">已解决</label>';
+          break;
+      }
+      return comments;
+    }
+
+      /* keyname formatter */
+    function keyFormatter(data) {
+      var keys = data.split(',');
+      var keyField = '';
+      for(var i = 0 ; i< keys.length; i++){
+        keyField += '<li class="badge">' + keys[i] + '</li>';
+      }
+      return '<ul class="list-inline">' + keyField + '</ul>';
+    }
+
+    // sometimes footer render error.
+    setTimeout(function () {
+      $table.bootstrapTable('resetView');
+    }, 200);
+    $table.on('check.bs.table uncheck.bs.table ' +
+        'check-all.bs.table uncheck-all.bs.table', function () {
+      $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+      // save your data, here just save the current page
+      selections = getIdSelections();
+      // push or splice the selections if you want to save all data selections
+    });
+/*    $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+      if (index % 2 == 1) {
+        alert('index = ' + index);
+        $detail.html('Loading from ajax request...');
+        $.get('LICENSE', function (res) {
+          $detail.html(res.replace(/\n/g, '<br>'));
+        });
+      }
+    });*/
+      /*$table.on('click-row.bs.table', function(row, $element, field){
+       alert('你点击的是：' + row[0] + ' , ' + field[0]);
+       });*/
+    $table.on('all.bs.table', function (e, name, args) {
+      console.log(name, args);
+    });
+    $remove.click(function () {
+      var ids = getIdSelections();
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: ids
+      });
+      $remove.prop('disabled', true);
+    });
+    $(window).resize(function () {
+      $table.bootstrapTable('resetView', {
+        height: getHeight()
+      });
+    });
+  }
+  function getIdSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+      return row.id
+    });
+  }
+  function responseHandler(res) {
+    $.each(res.rows, function (i, row) {
+      row.state = $.inArray(row.id, selections) !== -1;
+    });
+    return res;
+  }
+  function detailFormatter(index, row) {
+    var html = [];
+    $.each(row, function (key, value) {
+      if(key == 'content' || key =='reContent' || key =='image'){
+        var keyName = '';
+        switch(key){
+          case 'content':
+            keyName = '详细内容';
+            break;
+          case 'reContent':
+            keyName = '回复内容';
+            break;
+          case 'image':
+            keyName = '附图';
+            break;
+        }
+        if(key == 'image'){
+          html.push('<p><b>' + keyName + '：</b><ul class="list-inline">');
+          var imageList = value.split(',');
+          for(var i=0 ; i< imageList.length; i++){
+            html.push('<li><img width="20%" src="/images/uploads/' + imageList[i] + '"></li>');
+          }
+          html.push('</ul>');
+        }else{
+          html.push('<p><b>' + keyName + '：</b>' + value + '</p>');
+        }
+      }
+    });
+    return html.join('');
+  }
+  function operateFormatter(value, row, index) {
+    return [
+      '<a class="op" href="javascript:void(0)" title="show">',
+      '<i class="glyphicon glyphicon-eye-open text-primary"></i></a>',
+      '<a class="op" href="javascript:void(0)" title="edit">',
+      '<i class="glyphicon glyphicon-pencil text-warning"></i></a>',
+      '<a class="op" href="javascript:void(0)" title="reply">',
+      '<i class="glyphicon glyphicon-edit" text-info></i></a>',
+      '<a class="op" href="javascript:void(0)" title="remove">',
+      '<i class="glyphicon glyphicon-remove text-danger"></i></a>'
+    ].join('');
+  }
+  window.operateEvents = {
+    'click [title=show]': function (e, value, row, index) {
+      alert('You click show action, row: ' + JSON.stringify(row));
+    },
+    'click [title=eidt]': function (e, value, row, index) {
+      alert('You click edit action, row: ' + JSON.stringify(row));
+    },
+    'click [title=reply]': function (e, value, row, index) {
+      alert('You click reply action, row: ' + JSON.stringify(row));
+    },
+    'click [title=remove]': function (e, value, row, index) {
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: [row.id]
+      });
+    }
+  };
+  function totalTextFormatter(data) {
+    return 'Total';
+  }
+  function totalNameFormatter(data) {
+    return data.length;
+  }
+  function getHeight() {
+    return $(window).height() - $('h1').outerHeight(true);
+    // return '550';
+  }
+  $(function () {
+    var scripts = [
+          location.search.substring(1) || 'stylesheets/bootstrap-table/src/bootstrap-table.js',
+          'stylesheets/bootstrap-table/src/extensions/export/bootstrap-table-export.js',
+          'http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js',
+          '/stylesheets/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js'
+        ],
+        eachSeries = function (arr, iterator, callback) {
+          callback = callback || function () {
+              };
+          if (!arr.length) {
+            return callback();
+          }
+          var completed = 0;
+          var iterate = function () {
+            iterator(arr[completed], function (err) {
+              if (err) {
+                callback(err);
+                callback = function () {
+                };
+              }
+              else {
+                completed += 1;
+                if (completed >= arr.length) {
+                  callback(null);
+                }
+                else {
+                  iterate();
+                }
+              }
+            });
+          };
+          iterate();
+        };
+    eachSeries(scripts, getScript, initTable);
+  });
+  function getScript(url, callback) {
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.src = url;
+    var done = false;
+    // Attach handlers for all browsers
+    script.onload = script.onreadystatechange = function () {
+      if (!done && (!this.readyState ||
+          this.readyState == 'loaded' || this.readyState == 'complete')) {
+        done = true;
+        if (callback)
+          callback();
+        // Handle memory leak in IE
+        script.onload = script.onreadystatechange = null;
+      }
+    };
+    head.appendChild(script);
+    // We handle everything using the script element injection
+    return undefined;
+  }
+</script>
 </body>
 </html>
