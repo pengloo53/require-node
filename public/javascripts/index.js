@@ -89,8 +89,6 @@ $(function () {
     $('ul.pagination li a:last').removeAttr('href').parent().addClass('disabled');
   }
 
-
-
   /* function */
   function covertStatus(statusComment) {
     switch (statusComment) {
