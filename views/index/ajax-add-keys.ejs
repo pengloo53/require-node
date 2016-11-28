@@ -1,6 +1,6 @@
 <% for(var i=0; i < keys.length; i++){ %>
-<label class="checkbox-inline">
-    <input type="checkbox" name="key" id="<%= cate %>-key" value="<%= keys[i].keyname %>">
+<label class="radio-inline">
+    <input type="radio" name="key" id="<%= cate %>-key" value="<%= keys[i].keyname %>">
     <span class="badge"><%= keys[i].keyname %></span>
 </label>
 <% } %>

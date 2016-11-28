@@ -1,6 +1,7 @@
 var express = require('express');
 var dbDept = require('../db/dept.js');
 var dbMessage = require('../db/message.js');
+var dbCates = require('../db/cates.js');
 var myUtil = require('../util/myUtil.js');
 var router = express.Router();
 
@@ -87,16 +88,53 @@ router.post('/1', function (req, res, next) {
 
 
 /*------------------------BEGIN Ajax-----------------------------------*/
-/* Delete message */
-router.get('/del/:id', function (req, res, next) {
+/* reply message */
+router.post('/reply/:id', function(req,res,next){
   var id = req.params.id;
-  dbMessage.delMessage(id, function (errs, rows) {
-    if (!errs) {
-      res.end('删除成功');
-    } else {
-      next();
-    }
-  });
+  var reContent = req.body.reContent;
+  var reTime = myUtil.getTime(new Date());
+  var reUser = myUtil.getIp(req);
+  var status = req.body.status;
+  if(reContent && status){
+    dbMessage.replyMessage(id,reContent,reTime,reUser,status,function(errs,rows){
+      if(!errs){
+        res.end('回复成功');
+      }else{
+        next();
+      }
+    });
+  }
+});
+
+/* Delete message */
+router.post('/del/:table/:id', function (req, res, next) {
+  var id = req.params.id;
+  var table = req.params.table;
+  if(table && table == 'message'){
+    dbMessage.delMessage(id, function (errs, rows) {
+      if (!errs) {
+        res.end('删除成功');
+      } else {
+        next();
+      }
+    });
+  }else if(table == 'dept'){
+    dbDept.delDept(id,function(errs,rows){
+      if(!errs){
+        res.send('删除成功');
+      }else{
+        next();
+      }
+    });
+  }else if(table == 'cates'){
+    dbCates.delCate(id, function(errs, rows){
+      if(!errs){
+        res.send('删除成功');
+      }else{
+        next();
+      }
+    });
+  }
 });
 
 /* bootstrap-table 获取的json数据*/

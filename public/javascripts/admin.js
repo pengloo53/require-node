@@ -1,9 +1,16 @@
 var $table = $('#table'),
     $remove = $('#remove'),
-    selections = [],
-    data_url = '/admin/data/message';
+    selections = [];
+/* bootstrap-table */
+var scripts = [
+  location.search.substring(1) || 'stylesheets/bootstrap-table/src/bootstrap-table.js',
+  'stylesheets/bootstrap-table/src/extensions/export/bootstrap-table-export.js',
+  'http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js',
+  '/stylesheets/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js'
+];
 
-function initTable() {
+/* 获取Message表的bootstrap-table */
+function initTableFromMessage() {
   $table.bootstrapTable({
     toolbar: '#toolbar',
     search: false,
@@ -21,7 +28,7 @@ function initTable() {
     sortName: 'id',
     pageList: '[10, 25, 50, 100, ALL]',
     sidePagination: 'server',
-    url: data_url,
+    url: '/admin/data/message',
     responseHandle: responseHandler,
     height: 550,
     columns: [
@@ -54,7 +61,7 @@ function initTable() {
         field: 'keyname',
         title: '关键词',
         valign: 'middle',
-        formatter: keyFormatter
+        // formatter: keyFormatter  // 显示成badge的样式
       }, {
         field: 'title',
         title: '主题',
@@ -113,6 +120,7 @@ function initTable() {
       }
     ]
   });
+
   /* status convert to comments */
   function convertStatusFormatter(data) {
     var comments = '';
@@ -143,6 +151,52 @@ function initTable() {
     return '<ul class="list-inline">' + keyField + '</ul>';
   }
 
+  /* detail fromatter */
+  function detailFormatter(index, row) {
+    var html = [];
+    $.each(row, function (key, value) {
+      if (key == 'content' || key == 'reContent' || key == 'image') {
+        var keyName = '';
+        switch (key) {
+          case 'content':
+            keyName = '详细内容';
+            break;
+          case 'reContent':
+            keyName = '回复内容';
+            break;
+          case 'image':
+            keyName = '附图';
+            break;
+        }
+        if (key == 'image' && value) {
+          html.push('<p><b>' + keyName + '：</b><ul class="list-inline">');
+          var imageList = value.split(',');
+          for (var i = 0; i < imageList.length; i++) {
+            html.push('<li><img width="20%" src="/images/uploads/' + imageList[i] + '"></li>');
+          }
+          html.push('</ul>');
+        } else {
+          html.push('<p><b>' + keyName + '：</b>' + value + '</p>');
+        }
+      }
+    });
+    return html.join('');
+  }
+
+  /* operate formatter */
+  function operateFormatter(value, row, index) {
+    return [
+      '<a class="op" href="javascript:void(0)" title="show">',
+      '<i class="glyphicon glyphicon-eye-open text-primary"></i></a>',
+      '<a class="op" href="javascript:void(0)" title="edit">',
+      '<i class="glyphicon glyphicon-pencil text-warning"></i></a>',
+      '<a class="op" href="javascript:void(0)" title="reply">',
+      '<i class="glyphicon glyphicon-edit text-info"></i></a>',
+      '<a class="op" href="javascript:void(0)" title="remove">',
+      '<i class="glyphicon glyphicon-remove text-danger"></i></a>'
+    ].join('');
+  }
+
   // sometimes footer render error.
   setTimeout(function () {
     $table.bootstrapTable('resetView');
@@ -154,18 +208,7 @@ function initTable() {
     selections = getIdSelections();
     // push or splice the selections if you want to save all data selections
   });
-  /*    $table.on('expand-row.bs.table', function (e, index, row, $detail) {
-   if (index % 2 == 1) {
-   alert('index = ' + index);
-   $detail.html('Loading from ajax request...');
-   $.get('LICENSE', function (res) {
-   $detail.html(res.replace(/\n/g, '<br>'));
-   });
-   }
-   });*/
-  /*$table.on('click-row.bs.table', function(row, $element, field){
-   alert('你点击的是：' + row[0] + ' , ' + field[0]);
-   });*/
+
   $table.on('all.bs.table', function (e, name, args) {
     console.log(name, args);
   });
@@ -177,12 +220,21 @@ function initTable() {
     });
     $remove.prop('disabled', true);
   });
-  $(window).resize(function () {
+/*  $(window).resize(function () {
     $table.bootstrapTable('resetView', {
       height: getHeight()
     });
-  });
+  });*/
 }
+
+/* 获取Dept表的bootstrap-table */
+function initTableFromDept() {
+}
+
+/* 获取Cates表的bootstrap-table */
+function initTableFromCates() {
+}
+
 function getIdSelections() {
   return $.map($table.bootstrapTable('getSelections'), function (row) {
     return row.id
@@ -194,135 +246,116 @@ function responseHandler(res) {
   });
   return res;
 }
-function detailFormatter(index, row) {
-  var html = [];
-  $.each(row, function (key, value) {
-    if (key == 'content' || key == 'reContent' || key == 'image') {
-      var keyName = '';
-      switch (key) {
-        case 'content':
-          keyName = '详细内容';
-          break;
-        case 'reContent':
-          keyName = '回复内容';
-          break;
-        case 'image':
-          keyName = '附图';
-          break;
-      }
-      if (key == 'image') {
-        html.push('<p><b>' + keyName + '：</b><ul class="list-inline">');
-        var imageList = value.split(',');
-        for (var i = 0; i < imageList.length; i++) {
-          html.push('<li><img width="20%" src="/images/uploads/' + imageList[i] + '"></li>');
-        }
-        html.push('</ul>');
-      } else {
-        html.push('<p><b>' + keyName + '：</b>' + value + '</p>');
-      }
-    }
-  });
-  return html.join('');
-}
-function operateFormatter(value, row, index) {
-  return [
-    '<a class="op" href="javascript:void(0)" title="show">',
-    '<i class="glyphicon glyphicon-eye-open text-primary"></i></a>',
-    '<a class="op" href="javascript:void(0)" title="edit">',
-    '<i class="glyphicon glyphicon-pencil text-warning"></i></a>',
-    '<a class="op" href="javascript:void(0)" title="reply">',
-    '<i class="glyphicon glyphicon-edit text-info"></i></a>',
-    '<a class="op" href="javascript:void(0)" title="remove">',
-    '<i class="glyphicon glyphicon-remove text-danger"></i></a>'
-  ].join('');
-}
+
 window.operateEvents = {
   'click [title=show]': function (e, value, row, index) {
-    alert('You click show action, row: ' + JSON.stringify(row));
+    if(!$('tr[data-index="'+index+'"]+tr.detail-view').html()){
+      $('#table').bootstrapTable('expandRow', index);
+    }else{
+      $('#table').bootstrapTable('collapseRow', index);
+    }
   },
   'click [title=edit]': function (e, value, row, index) {
     alert('You click edit action, row: ' + JSON.stringify(row));
   },
   'click [title=reply]': function (e, value, row, index) {
-    alert('You click reply action, row: ' + JSON.stringify(row));
+    var messageId = row.id;
+    var title = row.title;
+    var reContent = row.reContent;
+    $('#replyModal #myModalLabel').html('回复主题：' + title);
+    $('#reContent').val(reContent);
+    $('#replyModal').modal('show');
+    $('#replyConfirm').click(function () {
+      $.ajax({
+        url: "/admin/reply/" + messageId,
+        method: 'POST',
+        data: {
+          reContent: $('#replyModal #reContent').val(),
+          status: $('#replyModal #status').val()
+        },
+        success: function(result){
+          $('#replyModal').modal('hide');
+          $('#toolbar').append(result);
+          $table.bootstrapTable('refresh');
+        }
+      });
+    });
   },
   'click [title=remove]': function (e, value, row, index) {
-    $table.bootstrapTable('remove', {
-      field: 'id',
-      values: [row.id]
+    var messageId = row.id;
+    // $('#delConfirm').attr('messageId',messageId);
+    $('#removeModal').modal('show');
+    $('#delConfirm').click(function () {
+      // var messageId = $(this).attr('messageId');
+      $.ajax({
+        url: '/admin/del/message/' + messageId, method: 'POST', success: function (result) {
+          // var alertMessage = '<span class="alert alert-danger">' + result + '</span>';
+          $('#removeModal').modal('hide');
+          // $('#toolbar').append(alertMessage);
+          $table.bootstrapTable('remove', {
+            field: 'id',
+            values: [row.id]
+          });
+        }
+      });
     });
   }
 };
-/*  function totalTextFormatter(data) {
- return 'Total';
- }
- function totalNameFormatter(data) {
- return data.length;
- }
- function getHeight() {
- return $(window).height() - $('h1').outerHeight(true);
- }*/
+
+
 $(function () {
+
   /* ajax获取类别，部门以及其他设置 */
-  // $("#mainContent")
-  $('.nav li').click(function(){
+  $('.nav li').click(function () {
     var value = $(this).text();
-    switch(value){
+    switch (value) {
       case '部门':
-        return 'dept';
+        eachSeries(scripts, getScript, initTableFromDept);
         break;
       case '分类':
-        return 'cates';
+        eachSeries(scripts, getScript, initTableFromCates);
         break;
       case '其他':
-        return 'others';
+        ajaxGetOthers();
         break;
       default:
-        return '';
+        eachSeries(scripts, getScript, initTableFromMessage);
     }
-    if(!value){
-
-    }
-
-  });
-
-
-  /* bootstrap-table */
-  var scripts = [
-        location.search.substring(1) || 'stylesheets/bootstrap-table/src/bootstrap-table.js',
-        'stylesheets/bootstrap-table/src/extensions/export/bootstrap-table-export.js',
-        'http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js',
-        '/stylesheets/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js'
-      ],
-      eachSeries = function (arr, iterator, callback) {
-        callback = callback || function () {
-            };
-        if (!arr.length) {
-          return callback();
-        }
-        var completed = 0;
-        var iterate = function () {
-          iterator(arr[completed], function (err) {
-            if (err) {
-              callback(err);
-              callback = function () {
-              };
-            }
-            else {
-              completed += 1;
-              if (completed >= arr.length) {
-                callback(null);
-              }
-              else {
-                iterate();
-              }
-            }
-          });
-        };
-        iterate();
-      };
-  eachSeries(scripts, getScript, initTable);
+    $(this).siblings().removeClass('active').end().addClass('active');
+  }).find('a:contains(首页)').click();
 });
+
+/*function ajaxGetOthers(){
+ $.ajax('');
+ }*/
+
+function eachSeries(arr, iterator, callback) {
+  callback = callback || function () {
+      };
+  if (!arr.length) {
+    return callback();
+  }
+  var completed = 0;
+  var iterate = function () {
+    iterator(arr[completed], function (err) {
+      if (err) {
+        callback(err);
+        callback = function () {
+        };
+      }
+      else {
+        completed += 1;
+        if (completed >= arr.length) {
+          callback(null);
+        }
+        else {
+          iterate();
+        }
+      }
+    });
+  };
+  iterate();
+}
 function getScript(url, callback) {
   var head = document.getElementsByTagName('head')[0];
   var script = document.createElement('script');

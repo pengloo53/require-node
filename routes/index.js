@@ -49,7 +49,7 @@ function getAddPage(res, message) {
 
 /* ----------------- BEGIN Ajax ----------------------*/
 /* GET keys by cate use ajax*/
-/*router.get('/ajax/:cate', function (req, res, next) {
+router.get('/ajax/:cate', function (req, res, next) {
   var cate = req.params.cate;
   dbCates.getkeysByCate(cate, function (errs, rows) {
     res.render('index/ajax-add-keys', {
@@ -59,7 +59,7 @@ function getAddPage(res, message) {
   });
 });
 
-/!* GET Home by status *!/
+/* GET Home by status */
 router.get('/status/:status', function (req, res, next) {
   var status = req.params.status;
   var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
@@ -75,7 +75,7 @@ router.get('/status/:status', function (req, res, next) {
       next();
     }
   });
-});*/
+});
 
 router.get('/ajax/others/:id', function(req,res,next){
   var id = req.params.id;
