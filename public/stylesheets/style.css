@@ -7,7 +7,34 @@ a {
   /*color: #00B7FF;*/
 }
 
-/* index.ejs */
+/* ---------------------------- BEGIN index.ejs ----------------------- */
+/* nav dropdown-menu 悬浮时状态颜色 */
+.status-hover[data-status="1"]:hover{
+  background-color: #d9534f;
+}
+.status-hover[data-status="2"]:hover{
+  background-color: #337ab7;
+}
+.status-hover[data-status="3"]:hover{
+  background-color: #f0ad4e;
+}
+.status-hover[data-status="4"]:hover{
+  background-color: #5cb85c;
+}
+/* message-list-item 状态颜色 */
+.status[data-status="1"]{
+  background-color: #d9534f;
+}
+.status[data-status="2"]{
+  background-color: #337ab7;
+}
+.status[data-status="3"]{
+  background-color: #f0ad4e;
+}
+.status[data-status="4"]{
+  background-color: #5cb85c;
+}
+
 .breadcrumb{
   margin:0;
 }
@@ -27,6 +54,9 @@ ul.image img{
   padding-right: 1em;
   border-bottom: 1px solid #eee;
 }
+.message-list-item:hover{
+  background-color: #FFF9EB;
+}
 
 .message-list-item .qa-rank{
   margin: 0 10px;
@@ -35,19 +65,40 @@ ul.image img{
   color: #fff;
 }
 
-.message-list .mainContent{
+.message-list-item .mainContent{
   overflow: auto;
   overflow-x: hidden;
   padding-bottom: 0.8em;
 }
 
-.status,.answers,.views{
+.message-list-item .status{
   display: inline-block;
   line-height: 2.4em;
   width: 50px;
   height: 25px;
   font-size: 0.8em;
   border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.up{
+  width: 40px;
+  height: 20px;
+  left: 5px;
+  line-height: 1.5em;
+  position: relative;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.24);
+  color: rgba(15, 15, 15, 0.54);
+  display: none;
+}
+
+.up-yes{
+  color: #d9534f;
+}
+
+.up:hover{
+  color: #d9534f;
+  cursor: pointer;
 }
 
 .message-list .info{
@@ -89,14 +140,14 @@ ul.image img{
 .keyname li a:hover{
   background-color: #00B7FF;
 }
-/*
-.dropdown-menu li{
-  padding-left: 30px;
-  line-height: 2em;
-  cursor: pointer;
-}*/
 
-/* add.ejs */
+#loading{
+  display:none;
+}
+/* ---------------------------- END index.ejs ----------------------- */
+
+
+/* ---------------------------- BEGIN add.ejs ----------------------- */
 #keys{
   padding-left: 1.4em;
 }
@@ -105,9 +156,9 @@ h1 small{
   margin-left: 1em;
   font-size: 0.4em;
 }
+/* ---------------------------- END add.ejs ----------------------- */
 
-
-/* admin.ejs */
+/* ---------------------------- BEGIN admin.ejs ----------------------- */
 #table ul>li{
   display: inline;
   padding: 5px;
@@ -115,6 +166,9 @@ h1 small{
 .op{
   margin-left: 5px;
 }
+
+/* ---------------------------- END admin.ejs ----------------------- */
+
 .black_overlay{
   display: none;
   position: absolute;

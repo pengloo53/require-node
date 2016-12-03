@@ -47,8 +47,26 @@ function getAddPage(res, message) {
  });
  }*/
 
+/* GET Home by status */
+/*router.get('/status/:status', function (req, res, next) {
+ var status = req.params.status;
+ var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
+ dbMessage.getMessagesByStatus(page, status, function (errs, rows) {
+ if (!errs) {
+ var subtitle = statusCovert.fromIdToComment(status * 1);
+ console.log("---------------------------------2" + subtitle);
+ res.render('index/index-ajax-status', {
+ subtitle: subtitle,
+ messages: rows
+ });
+ } else {
+ next();
+ }
+ });
+ });*/
+
 /* ----------------- BEGIN Ajax ----------------------*/
-/* GET keys by cate use ajax*/
+/* GET keys by cate in add page */
 router.get('/ajax/:cate', function (req, res, next) {
   var cate = req.params.cate;
   dbCates.getkeysByCate(cate, function (errs, rows) {
@@ -58,39 +76,44 @@ router.get('/ajax/:cate', function (req, res, next) {
     });
   });
 });
-
-/* GET Home by status */
-router.get('/status/:status', function (req, res, next) {
-  var status = req.params.status;
-  var page = (typeof (req.query.page) == 'undefined') ? 1 : req.query.page;
-  dbMessage.getMessagesByStatus(page, status, function (errs, rows) {
-    if (!errs) {
-      var subtitle = statusCovert.fromIdToComment(status * 1);
-      console.log("---------------------------------2" + subtitle);
-      res.render('index/index-ajax-status', {
-        subtitle: subtitle,
-        messages: rows
+/* GET others data in index page*/
+router.get('/ajax/others/:id', function (req, res, next) {
+  var id = req.params.id;
+  dbMessage.getMessageById(id, function (errs, rows) {
+    if (!errs && rows) {
+      var images = rows[0].image.split(',');
+      var content = rows[0].content;
+      var reContent = rows[0].reContent;
+      res.render('index/ajax-index-others.ejs', {
+        content: content,
+        images: images,
+        reContent: reContent
       });
     } else {
       next();
     }
   });
 });
+/* POST up a message in index page */
+router.post('/ajax/up/:id', function (req, res, next) {
+  var id = req.params.id * 1;
+  dbMessage.upMessage(id, function (errs, rows) {
+    if (!errs) {
+      res.end('success');
+    } else {
+      res.end('error');
+    }
+  });
+});
 
-router.get('/ajax/others/:id', function(req,res,next){
+/* POST cancel up a message in index page */
+router.post('/ajax/cancel/:id', function (req, res, next) {
   var id = req.params.id;
-  dbMessage.getMessageById(id,function(errs,rows){
-    if(!errs && rows){
-      var images = rows[0].image.split(',');
-      var content = rows[0].content;
-      var reContent = rows[0].reContent;
-      res.render('index/ajax-index-others.ejs',{
-        content: content,
-        images: images,
-        reContent: reContent
-      });
-    }else{
-      next();
+  dbMessage.downMessage(id, function (errs, rows) {
+    if (!errs) {
+      res.end('success');
+    } else {
+      res.end('error');
     }
   });
 });
@@ -166,9 +189,10 @@ router.post('/add', upload.array('image'), function (req, res, next) {
   var user = myUtil.getIp(req);
   var time = myUtil.getTime(new Date());
   var status = 1;
+  var upNum = 1;
   console.log("..................................add message: %s,%s,%s,%s,%s,%s,%d.", category, keyname, content, dept, user, time, status);
   if (keyname && title && dept) {
-    dbMessage.addMessage(category, keyname, title, content, dept, time, user, status, image, function (errs, rows) {
+    dbMessage.addMessage(category, keyname, title, content, dept, time, user, status, image, upNum, function (errs, rows) {
       if (!errs) {
         res.redirect('/');
       } else {

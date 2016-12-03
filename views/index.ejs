@@ -24,9 +24,11 @@
                             status = '';
                     }
                 %>
-                <div class="status"><%= status %></div>
-                <!--                      <div class="answers"></div>
-                                      <div class="views"></div>-->
+                <div class="status" data-status="<%= messages[i].status %>"><%= status %></div>
+                <div class="up" data-messageId="<%= messages[i].id %>">
+                    <span><i class="glyphicon glyphicon-chevron-up"></i></span>
+                </div>
+                <!--                    <div class="views"></div>-->
             </div>
             <div class="mainContent">
                 <ul class="info list-inline">
@@ -41,6 +43,7 @@
                     <li><a href="#" class="badge"><%= keys[j] %></a></li>
                     <% } %>
                 </ul>
+                <div id="loading">努力加载中...</div>
                 <div id="<%= messages[i].id %>"></div>
             </div>
         </section>

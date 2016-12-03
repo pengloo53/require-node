@@ -1,21 +1,24 @@
-<p class="content">
+<div id="content">
     <% if(content == ''){ %>
-    <span class="text-danger">（无）</span>
+    <p class="text-danger">（无）</p>
     <% }else{ %>
-    <%= content %>
+    <p><%= content %></p>
     <% } %>
-</p>
+</div>
+
 <% if(images != ''){ %>
 <ul class="image list-inline">
     <% for(var img = 0; img < images.length; img++){ %>
     <li>
-        <a href="/images/uploads/<%= images[img] %>" class="img-responsive"><img src="/images/uploads/<%= images[img] %>" alt=""></a>
+        <a href="/images/uploads/<%= images[img] %>" class="img-responsive"><img
+                    src="/images/uploads/<%= images[img] %>" alt=""></a>
     </li>
     <% } %>
 </ul>
 <% } %>
+
 <% if(reContent && reContent != ''){ %>
-<p class="reContent">
-    <span class="label label-success">回复：<%= reContent %></span>
-</p>
+<div id="reContent">
+    <p class="label label-success">回复：<%= reContent %></p>
+</div>
 <% } %>

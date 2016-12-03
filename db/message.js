@@ -3,9 +3,9 @@ var config = require('./config.js');
 
 /* ----------------BEGIN message------------------------- */
 // 添加message
-exports.addMessage = function (category, keyname, title, content, dept, time, user, status, image, callback) {
+exports.addMessage = function (category, keyname, title, content, dept, time, user, status, image,upNum, callback) {
   var conn = connect.getConn();
-  var statement = 'insert into message (category,keyname,title,content,dept,time,user,status,image) values (' + '"'
+  var statement = 'insert into message (category,keyname,title,content,dept,time,user,status,image,upNum) values (' + '"'
       + category + '","'
       + keyname + '","'
       + title + '","'
@@ -14,7 +14,8 @@ exports.addMessage = function (category, keyname, title, content, dept, time, us
       + time + '","'
       + user + '",'
       + status + ',"'
-      + image + '")';
+      + image + '",'
+      + upNum + ')';
   conn.query(statement, function (errs, rows, fields) {
     console.log("errs: " + errs + '\nrows: ' + rows + '\nfields: ' + fields);
     callback(errs, rows);
@@ -139,6 +140,26 @@ exports.getCountFromMessageByCate = function(cate, callback){
 exports.getMessagesByCate = function(page,cate,callback){
   var conn = connect.getConn();
   var statement = 'select * from message where category="' + cate + '" order by id desc limit ' + (page-1)*config.pageCount + ',' + config.pageCount;
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
+// 顶一个
+exports.upMessage = function(id,callback){
+  var conn = connect.getConn();
+  var statement = 'update message set upNum=upNum+1 where id = ' + id;
+  conn.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(conn);
+};
+
+// 取消顶一个
+exports.downMessage = function(id,callback){
+  var conn = connect.getConn();
+  var statement = 'update message set upNum=upNum-1 where id = ' + id;
   conn.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });
