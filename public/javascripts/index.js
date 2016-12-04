@@ -1,34 +1,20 @@
 $(function () {
+  /* have up 过的message 样式设置 */
+  $('.message-list-item').each(function(){
+    var mid = $(this).attr('mid');
+    var cookie = $.cookie('haveUp'+mid);
+    if(cookie && cookie == 2){
+      $(this).find('div.up').addClass('up-yes');
+    }
+  });
   /* up a message */
   $('.qa-rank .up').click(function () {
     var messageId = $(this).attr('data-messageId');
     var $plus = $('<span id="plus"><strong>+1</strong></span>');
     var $minus = $('<span id="minus"><strong>-1</strong></span>');
     var $this = $(this);
-    // $(this).append($plus);
-    alert($.cookie('haveUp'));
-    if($.cookie('haveUp')){
-      $minus.insertAfter($this).css({
-        'position': 'relative',
-        'z-index': '1',
-        'color': '#5cb85c'
-      }).animate({
-        top: -30 + 'px',
-        left: +30 + 'px'
-      }, 'slow',function(){
-        $(this).fadeIn('slow').remove();
-      });
-      $.ajax({
-        url: '/ajax/cancel/'+ messageId,
-        method: 'POST',
-        global: false,
-        success: function(result){
-          $this.remove('up-yes');
-        }
-      });
-      $.cookie('haveUp', messageId, {path: '/', expires: 1});
-      return false;
-    }else{
+    var bool = $.cookie('haveUp'+messageId); // 是否Up
+    if(!bool || bool == 1){
       $plus.insertAfter($this).css({
         'position': 'relative',
         'z-index': '1',
@@ -45,9 +31,32 @@ $(function () {
         global: false,
         success: function (result) {
           $this.addClass('up-yes');
+          // alert('add Success');
+          $.cookie('haveUp'+messageId, 2, {path: '/', expires: 1});
         }
       });
-      $.cookie('haveUp', messageId, {path: '/', expires: 1});
+      return false;
+    }else{
+      $minus.insertAfter($this).css({
+        'position': 'relative',
+        'z-index': '1',
+        'color': '#5cb85c'
+      }).animate({
+        top: -30 + 'px',
+        left: +30 + 'px'
+      }, 'slow',function(){
+        $(this).fadeIn('slow').remove();
+      });
+      $.ajax({
+        url: '/ajax/cancel/'+ messageId,
+        method: 'POST',
+        global: false,
+        success: function(result){
+          $this.removeClass('up-yes');
+          // alert('cancel success');
+          $.cookie('haveUp'+messageId, 1, {path: '/'});
+        }
+      });
       return false;
     }
   });

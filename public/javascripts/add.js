@@ -31,7 +31,7 @@ $(function () {
       '<div class="input-group {class}">\n' +
       '   <div class="input-group-btn">\n' +
       '       {browse}\n' +
-      // '       {uploads}\n' +
+      '       {uploads}\n' +
       '       {remove}\n' +
       '   </div>\n' +
       '   {caption}\n' +
