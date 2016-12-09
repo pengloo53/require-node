@@ -220,15 +220,44 @@ function initTableFromMessage() {
     });
     $remove.prop('disabled', true);
   });
-/*  $(window).resize(function () {
-    $table.bootstrapTable('resetView', {
-      height: getHeight()
-    });
-  });*/
+  /*  $(window).resize(function () {
+   $table.bootstrapTable('resetView', {
+   height: getHeight()
+   });
+   });*/
 }
 
 /* 获取Dept表的bootstrap-table */
 function initTableFromDept() {
+  $table.bootstrapTable({
+    // toolbar: #toolbar,
+    url: '/admin/data/dept',
+    columns: [
+      {
+        field: 'state',
+        checkbox: true,
+        valign: 'middle',
+        align: 'center'
+      }, {
+        title: '#',
+        field: 'id',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+      }, {
+        field: 'plant',
+        title: '工厂',
+        valign: 'middle',
+        align: 'center',
+        sortable: true
+        // formatter: convertStatusFormatter
+      }, {
+        field: 'deptname',
+        title: '部门',
+        valign: 'middle',
+        align: 'center'
+      }]
+  });
 }
 
 /* 获取Cates表的bootstrap-table */
@@ -249,9 +278,9 @@ function responseHandler(res) {
 
 window.operateEvents = {
   'click [title=show]': function (e, value, row, index) {
-    if(!$('tr[data-index="'+index+'"]+tr.detail-view').html()){
+    if (!$('tr[data-index="' + index + '"]+tr.detail-view').html()) {
       $('#table').bootstrapTable('expandRow', index);
-    }else{
+    } else {
       $('#table').bootstrapTable('collapseRow', index);
     }
   },
@@ -273,7 +302,7 @@ window.operateEvents = {
           reContent: $('#replyModal #reContent').val(),
           status: $('#replyModal #status').val()
         },
-        success: function(result){
+        success: function (result) {
           $('#replyModal').modal('hide');
           $('#toolbar').append(result);
           $table.bootstrapTable('refresh');
@@ -304,19 +333,36 @@ window.operateEvents = {
 
 
 $(function () {
-
   /* ajax获取类别，部门以及其他设置 */
   $('.nav li').click(function () {
     var value = $(this).text();
     switch (value) {
       case '部门':
-        eachSeries(scripts, getScript, initTableFromDept);
+        $.ajax({
+          url: '/admin/data/dept',
+          global: false,
+          success: function(result){
+            $('#mainContent').html(result);
+          }
+        });
         break;
       case '分类':
-        eachSeries(scripts, getScript, initTableFromCates);
+        $.ajax({
+          url: '/admin/data/cates',
+          global: false,
+          success: function(result){
+            $('#mainContent').html(result);
+          }
+        });
         break;
       case '其他':
-        ajaxGetOthers();
+        $.ajax({
+          url: '/admin/data/others',
+          global: false,
+          success: function(result){
+            $('#mainContent').html(result);
+          }
+        });
         break;
       default:
         eachSeries(scripts, getScript, initTableFromMessage);
@@ -324,10 +370,6 @@ $(function () {
     $(this).siblings().removeClass('active').end().addClass('active');
   }).find('a:contains(首页)').click();
 });
-
-/*function ajaxGetOthers(){
- $.ajax('');
- }*/
 
 function eachSeries(arr, iterator, callback) {
   callback = callback || function () {

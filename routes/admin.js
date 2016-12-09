@@ -89,17 +89,17 @@ router.post('/1', function (req, res, next) {
 
 /*------------------------BEGIN Ajax-----------------------------------*/
 /* reply message */
-router.post('/reply/:id', function(req,res,next){
+router.post('/reply/:id', function (req, res, next) {
   var id = req.params.id;
   var reContent = req.body.reContent;
   var reTime = myUtil.getTime(new Date());
   var reUser = myUtil.getIp(req);
   var status = req.body.status;
-  if(reContent && status){
-    dbMessage.replyMessage(id,reContent,reTime,reUser,status,function(errs,rows){
-      if(!errs){
+  if (reContent && status) {
+    dbMessage.replyMessage(id, reContent, reTime, reUser, status, function (errs, rows) {
+      if (!errs) {
         res.end('回复成功');
-      }else{
+      } else {
         next();
       }
     });
@@ -110,7 +110,7 @@ router.post('/reply/:id', function(req,res,next){
 router.post('/del/:table/:id', function (req, res, next) {
   var id = req.params.id;
   var table = req.params.table;
-  if(table && table == 'message'){
+  if (table && table == 'message') {
     dbMessage.delMessage(id, function (errs, rows) {
       if (!errs) {
         res.end('删除成功');
@@ -118,19 +118,19 @@ router.post('/del/:table/:id', function (req, res, next) {
         next();
       }
     });
-  }else if(table == 'dept'){
-    dbDept.delDept(id,function(errs,rows){
-      if(!errs){
+  } else if (table == 'dept') {
+    dbDept.delDept(id, function (errs, rows) {
+      if (!errs) {
         res.send('删除成功');
-      }else{
+      } else {
         next();
       }
     });
-  }else if(table == 'cates'){
-    dbCates.delCate(id, function(errs, rows){
-      if(!errs){
+  } else if (table == 'cates') {
+    dbCates.delCate(id, function (errs, rows) {
+      if (!errs) {
         res.send('删除成功');
-      }else{
+      } else {
         next();
       }
     });
@@ -160,32 +160,7 @@ router.get('/data/:table', function (req, res, next) {
         if (!errs1 && !errs2) {
           rows = rows1;
           result.total = rows2[0].count;
-/*          // 从数据库取出数据后进行筛选
-          if (search) {
-            rows = rows.filter(function(item) {
-              return item.name.indexOf(search) !== -1;
-            });
-          }*/
-
-/*          if (['id', 'status', 'category'].indexOf(name) !== -1) {
-            rows = rows.sort(function(a, b) {
-              var c = a[name],
-                  d = b[name];
-
-              if (name === 'price') {
-                c = +c.substring(1);
-                d = +d.substring(1);
-              }
-              if (c < d) {
-                return order === 'asc' ? -1 : 1;
-              }
-              if (c > d) {
-                return order === 'asc' ? 1 : -1;
-              }
-              return 0;
-            });
-          }*/
-          console.log('max=' + max + ', offset= ' + offset + ', total=' + result.total + ', rows.length= ' + rows.length );
+          console.log('max=' + max + ', offset= ' + offset + ', total=' + result.total + ', rows.length= ' + rows.length);
           for (var i = 0; i < rows.length; i++) {
             result.rows.push(rows[i]);
           }
@@ -194,9 +169,21 @@ router.get('/data/:table', function (req, res, next) {
       });
     });
   } else if (table == 'dept') {
-
+    dbDept.findAllDepts(function (errs1, rows1) {
+      if (!errs1) {
+        res.render('admin/ajax-dept-page',{
+          depts: rows1
+        });
+      }
+    });
   } else if (table == 'cates') {
-
+    dbCates.getAll(function(errs1,rows1){
+      if(!errs1){
+        res.render('admin/ajax-cate-page',{
+          cates: rows1
+        });
+      }
+    })
   }
 });
 

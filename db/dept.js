@@ -29,7 +29,7 @@ exports.delDept = function (id, callback) {
 // 根据Plant查找所有的deptname
 exports.findAllDepts = function (callback) {
   var conn = connect.getConn();
-  var statement = 'select * from dept where plant = "' + plant + '"';
+  var statement = 'select * from dept where plant = "' + plant + '" order by id desc';
   conn.query(statement, function (errs, rows, fields) {
     callback(errs, rows);
   });

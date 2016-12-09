@@ -4,6 +4,15 @@
 
 var connect = require('./connect.js');
 
+exports.getAll = function(callback){
+  var client = connect.getConn();
+  var statement = 'select * from cates order by id desc';
+  client.query(statement, function(errs,rows,fields){
+    callback(errs,rows);
+  });
+  connect.endConn(client);
+};
+
 // 得到所有的category
 exports.getAllCates = function(callback){
   var client = connect.getConn();

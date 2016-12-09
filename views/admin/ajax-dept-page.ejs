@@ -1,0 +1,32 @@
+<div class="col-lg-6">
+    <p class="lead"></p>
+    <table class="table table-striped">
+        <thead>
+        <tr class="text-center">
+            <th class="text-center">#</th>
+            <th class="text-center">工厂</th>
+            <th class="text-center">部门</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form action="#">
+            <tr class="text-center">
+                <td>0</td>
+                <td><input type="text" class="form-control text-center" value="B1" disabled></td>
+                <td><input type="text" class="form-control" name="deptname"></td>
+                <td><button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span></button></td>
+            </tr>
+        </form>
+        <% for(var i = 0 ; i < depts.length; i++){ %>
+        <tr class="text-center">
+            <td><%= i + 1 %></td>
+            <td><%= depts[i].plant %></td>
+            <td><%= depts[i].deptname %></td>
+            <td><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button></td>
+        </tr>
+        <% } %>
+
+        </tbody>
+    </table>
+</div>
