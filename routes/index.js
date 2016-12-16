@@ -2,29 +2,29 @@ var express = require('express');
 var dbDept = require('../db/dept.js');
 var dbMessage = require('../db/message.js');
 var dbCates = require('../db/cates.js');
+var dbUser = require('../db/user.js');
 var myUtil = require('../util/myUtil.js');
 var router = express.Router();
 var util = require('util');
 var upload = require('../util/multerUpload.js');
 var statusCovert = require('../util/statusCovert.js');
+var config = require('../db/config.js');
 
 /* 传输消息参数，获取add页面 */
 function getAddPage(res, message) {
-  dbDept.findAllDepts(function (errs1, rows1) {
-    dbCates.getAllCates(function (errs2, rows2) {
-      dbCates.getkeysByCate('IT', function (errs3, rows3) {
-        if (!errs1 && !errs2 && !errs3) {
-          res.render('add', {
-            title: '添加需求',
-            message: message,
-            depts: rows1,
-            cates: rows2,
-            keys: rows3
-          });
-        } else {
-          next();
-        }
-      });
+  dbCates.getAllCates(function (errs2, rows2) {
+    dbCates.getkeysByCate('IT', function (errs3, rows3) {
+      if (!errs2 && !errs3) {
+        res.render('add', {
+          title: '添加需求',
+          message: message,
+          cates: rows2,
+          keys: rows3,
+          plant: config.plant
+        });
+      } else {
+        next();
+      }
     });
   });
 }
@@ -76,6 +76,19 @@ router.get('/ajax/:cate', function (req, res, next) {
     });
   });
 });
+
+/* GET dept by plant in add page */
+router.get('/ajax/dept/:plant', function (req, res, next) {
+  var plant = req.params.plant;
+  dbDept.findAllDepts(plant, function (errs, rows) {
+    if (!errs) {
+      res.json(rows);
+    } else {
+      next();
+    }
+  });
+});
+
 /* GET others data in index page*/
 router.get('/ajax/others/:id', function (req, res, next) {
   var id = req.params.id;
@@ -205,6 +218,51 @@ router.post('/add', upload.array('image'), function (req, res, next) {
   } else {
     getAddPage(res, '请填写完整');
   }
+});
+
+/* GET login page */
+router.get('/login', function (req, res, next) {
+  res.render('login', {
+    message: ''
+  });
+});
+
+/* POST log in */
+router.post('/login', function (req, res, next) {
+  var username = req.body.username;
+  var password = req.body.passwd;
+  console.log('username: ' + username + '\npassword: ' + password);
+  if (username && password) {
+    dbUser.valideUser(username, function (errs, rows) {
+      console.log('errs:' + errs + '\nrows :' + rows[0]);
+      if (!errs) {
+        if (rows[0].password && password == rows[0].password) {
+          console.log('登陆成功');
+          req.session.username = username;
+          res.redirect('/admin');
+        } else {
+          res.render('login', {
+            message: '用户名密码错误'
+          });
+        }
+      } else {
+        next();
+      }
+    })
+  } else {
+    res.render('login', {
+      message: '请填写完整'
+    });
+  }
+});
+
+/* POST logout */
+router.get('/logout', function (req, res, next) {
+  if (req.session.username) {
+    req.session.username = null;
+  }
+  req.session.destroy();
+  res.redirect('/');
 });
 
 module.exports = router;

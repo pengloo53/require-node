@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="/stylesheets/bootstrap-fileinput/css/fileinput.min.css">
-    <script src="/javascripts/jquery/dist/jquery.min.js"></script>
-    <script src="/stylesheets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/bootstrap-fileinput/css/fileinput.css">
+    <script src="/javascripts/jquery/dist/jquery.js"></script>
+    <script src="/stylesheets/bootstrap/dist/js/bootstrap.js"></script>
 </head>
 <body>
 <!--    <nav class="navbar navbar-default" role="navigation">
@@ -27,8 +27,10 @@
         <ul class="breadcrumb text-right">
             您好，欢迎，
             <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>-->
-            <li><a href="/add"><span class="glyphicon glyphicon-plus"></span> 添加需求</a></li>
+            <li><a href="/"><span class="glyphicon glyphicon-home"></span> 回到首页</a></li>
         </ul>
+        </ul>
+    </div>
     </div>
 </div>
 <div class="container">
@@ -80,12 +82,14 @@
             </div>
             <div class="form-group">
                 <label for="dept">所在部门<strong class="text-danger">*</strong></label>
-                <select class="form-control" name="dept">
-                    <option></option>
-                    <% for(var i = 0; i < depts.length; i++){ %>
-                    <option><%= depts[i].deptname %></option>
-                    <% } %>
-                </select>
+                <div class="input-group col-lg-4">
+                    <span class="input-group-addon" id="plant"><%= plant %></span>
+                    <select class="form-control" name="dept">
+                        <option></option>
+                    </select>
+                </div>
+
+
             </div>
             <div class="form-group">
                 <button class="btn btn-lg btn-primary" name="submit" onclick="check()">提交</button>
@@ -93,17 +97,21 @@
             </div>
         </form>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
         <div id="posible">
-            <h3 class="text-danger">您可能要提交的是...</h3>
-            <ul class="list-unstyled">
-                <li><a href="#">电脑不好使</a></li>
-                <li><a href="#">PO报表无法导出的问题</a></li>
-                <li><a href="#">一二三四五六七八九十一二三四五六七八九十</a></li>
-                <li><a href="#">电脑太卡，申请换新</a></li>
-                <li><a href="#">电脑太卡，申请换新</a></li>
-                <li><a href="#">电脑太卡，申请换新</a></li>
-            </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>您可能要提交的是...</strong></h3>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="#">电脑不好使</a></li>
+                    <li class="list-group-item"><a href="#">PO报表无法导出的问题</a></li>
+                    <li class="list-group-item"><a href="#">一二三四五六七八九十一二三四五六七八九十</a></li>
+                    <li class="list-group-item"><a href="#">电脑太卡，申请换新</a></li>
+                    <li class="list-group-item"><a href="#">电脑太卡，申请换新</a></li>
+                    <li class="list-group-item"><a href="#">电脑太卡，申请换新</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

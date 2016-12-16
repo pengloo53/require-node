@@ -34,23 +34,21 @@ exports.getkeysByCate = function(cate, callback){
 };
 
 // 更新key的数量
-exports.updateNum = function(category,keyname,callback){
+/*exports.updateNum = function(category,keyname,callback){
   var client = connect.getConn();
   var statement = 'update cates set num = num+1 where key = "' + key + '" and cate = ' + cate;
   client.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });
   connect.endConn(client);
-};
+};*/
 
 // 新增
 exports.addCate = function(category,keyname,callback){
   var client = connect.getConn();
-  var num = 0;  // 初始数量为0
-  var statement = 'insert into cates (category,keyname,num) values ("' +
+  var statement = 'insert into cates (category,keyname) values ("' +
           category + '","' +
-          keyname + '",' +
-          num + ')';
+          keyname + '")';
   client.query(statement, function(errs,rows,fields){
     callback(errs,rows);
   });

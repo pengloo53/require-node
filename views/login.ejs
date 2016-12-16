@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>后台登陆页</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/stylesheets/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+        body {
+            /*background: url(http://10.20.1.100/index/cover.jpg);*/
+            background-color: #222;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            padding: 0;
+        }
+        #home-overlay {
+            background-color: rgba(44, 62, 80, 0.3);
+            background-image: url("http://10.20.1.100/index/pattern.png");
+            background-repeat: repeat;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        h1{
+            color: #ffffff;
+            font-weight: 800;
+            margin-bottom: 1em;
+        }
+        #header{
+            margin-top: 15%;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="jumbotron">-->
+<div id="home-overlay"></div>
+<div class="container">
+    <div class="row" id="header">
+        <div class="col-lg-4 col-lg-offset-4">
+            <h1 class="text-center">后台登陆</h1>
+            <p class="lead"></p>
+            <p class="text-danger"><%= message %></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4">
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <!--<label for="username">用户名</label>-->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" name="username" class="form-control" id="usernmae" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <!--<label for="password">密码</label>-->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
+                        <input type="password" class='form-control' name="passwd" id="passwd" placeholder="密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="reset" id="reset" value="重置" class="btn btn-warning col-lg-4 col-lg-offset-1">
+                    <input type="submit" id="submit" class="btn btn-primary col-lg-4 col-lg-offset-2" value="登录">
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="row">
+
+    </div>
+</div>
+<!--</div>-->
+</body>
+</html>

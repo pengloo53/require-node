@@ -10,6 +10,21 @@ $(function () {
     });
   });
 
+  /* 异步获取dept信息 */
+  var plant = $('#plant').text();
+  $.ajax({
+    url: '/ajax/dept/' + plant,
+    global: false,
+    success: function (result) {
+      var html = '';
+      for (var i = 0; i < result.length; i++) {
+        html = '<option>' + result[i].deptname + '</option>';
+        // depts.push(html);
+        $('select[name="dept"]').append(html);
+      }
+    }
+  });
+
   /* fileinput 样式 */
   $("#input-id").fileinput({
     showUpload: false,
@@ -21,11 +36,11 @@ $(function () {
     browseLabel: '图片多选',
     browseClass: 'btn btn-default',
     allowedFileTypes: ['image'], // 限制文件类型为图片
-    allowedFileExtensions: ['jpg', 'png'], // 限制文件后缀名为jpg,png,gif
+    allowedFileExtensions: ['jpg', 'png', 'gif'], // 限制文件后缀名为jpg,png,gif
     maxFileCount: 3,  // 限制最多3张图片
     maxFileSize: 1024, // 限制图片大小，最大1024KB
     allowedPreviewTypes: ['image'],
-    initialCaption: '可以选择最多3张图片，格式为png或者jpg，大小不超过1M',
+    initialCaption: '可以选择最多3张图片，格式为png或者jpg，每张大小不超过1M',
     layoutTemplates: {
       main1: '{preview}\n' +
       '<div class="input-group {class}">\n' +

@@ -1,6 +1,4 @@
-<% for(var i=0; i < keys.length; i++){ %>
-<label class="radio-inline">
-    <input type="radio" name="key" id="<%= cate %>-key" value="<%= keys[i].keyname %>">
-    <span class="badge"><%= keys[i].keyname %></span>
-</label>
+<% for(var i = 0; i < keys.length; i++){ %>
+<input type="radio" name="key" id="<%= cate %>-key" value="<%= keys[i].keyname %>">
+<span class="badge"><%= keys[i].keyname %></span>
 <% } %>

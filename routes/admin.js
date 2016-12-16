@@ -2,8 +2,19 @@ var express = require('express');
 var dbDept = require('../db/dept.js');
 var dbMessage = require('../db/message.js');
 var dbCates = require('../db/cates.js');
+var dbUser = require('../db/user.js');
 var myUtil = require('../util/myUtil.js');
 var router = express.Router();
+var config = require('../db/config.js');
+
+/* admin路由权限验证 */
+router.use(function(req,res,next){
+  if(req.session.username){
+    next();
+  }else{
+    res.redirect('/login');
+  }
+});
 
 // 传递消息，获取admin首页
 /*function getAdminPage(res,message){
@@ -65,27 +76,6 @@ router.get('/:status', function (req, res, next) {
   }
 });
 
-/* Reply message */
-router.post('/1', function (req, res, next) {
-  var id = req.body.id;
-  var status = 2;
-  var reContent = req.body.reContent;
-  var reTime = myUtil.getTime(new Date());
-  var reUser = myUtil.getIp(req);
-  if (reContent) {
-    dbMessage.replyMessage(id, reContent, reTime, reUser, status, function (errs, rows) {
-      if (!errs) {
-        getAdminPageByStatus(res, '回复成功', 1);
-      } else {
-        res.render('err', {
-          message: errs,
-          error: errs
-        });
-      }
-    });
-  }
-});
-
 
 /*------------------------BEGIN Ajax-----------------------------------*/
 /* reply message */
@@ -106,7 +96,33 @@ router.post('/reply/:id', function (req, res, next) {
   }
 });
 
-/* Delete message */
+/* Add */
+router.post('/add/:table', function(req,res,next){
+  var table = req.params.table;
+  if(table && table == 'dept'){
+    var deptname = req.body.deptname;
+    var plant = req.body.plant;
+    dbDept.addDept(plant, deptname, function(errs,rows){
+      if(!errs){
+        res.send('添加成功');
+      }else{
+        next();
+      }
+    })
+  }else if(table && table == 'cates'){
+    var category = req.body.category;
+    var keyname = req.body.keyname;
+    dbCates.addCate(category, keyname, function(errs,rows){
+      if(!errs){
+        res.send('添加成功');
+      }else{
+        next();
+      }
+    })
+  }
+});
+
+/* Delete */
 router.post('/del/:table/:id', function (req, res, next) {
   var id = req.params.id;
   var table = req.params.table;
@@ -169,25 +185,28 @@ router.get('/data/:table', function (req, res, next) {
       });
     });
   } else if (table == 'dept') {
-    dbDept.findAllDepts(function (errs1, rows1) {
+    dbDept.findAllDepts(config.plant, function (errs1, rows1) {
       if (!errs1) {
-        res.render('admin/ajax-dept-page',{
+        res.render('admin/ajax-dept-page', {
           depts: rows1
         });
       }
     });
   } else if (table == 'cates') {
-    dbCates.getAll(function(errs1,rows1){
-      if(!errs1){
-        res.render('admin/ajax-cate-page',{
+    dbCates.getAll(function (errs1, rows1) {
+      if (!errs1) {
+        res.render('admin/ajax-cate-page', {
           cates: rows1
         });
       }
     })
+  } else {
+    res.render('/admin/ajax-others-page', {
+      title: '其他设置'
+    });
   }
 });
 
 /*------------------------END Ajax-----------------------------------*/
-
 
 module.exports = router;
