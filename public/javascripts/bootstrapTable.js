@@ -29,6 +29,7 @@ function initTableFromMessage() {
     pageList: '[10, 25, 50, 100, ALL]',
     sidePagination: 'server',
     url: '/admin/data/message',
+    ajaxOptions: {global: false},
     responseHandle: responseHandler,
     height: 550,
     columns: [
@@ -61,7 +62,7 @@ function initTableFromMessage() {
         field: 'keyname',
         title: '关键词',
         valign: 'middle',
-        // formatter: keyFormatter  // 显示成badge的样式
+        formatter: keyFormatter  // 显示成badge的样式
       }, {
         field: 'title',
         title: '主题',
@@ -239,6 +240,43 @@ function responseHandler(res) {
   return res;
 }
 
+var clickId = ''; // 最后点击的id
+$('#replyConfirm').click(function () {
+  if(clickId != '') {
+    $.ajax({
+      url: "/admin/reply",
+      method: 'POST',
+      data: {
+        id: clickId,
+        reContent: $('textarea[name=reContent]').val(),
+        status: $('select option:selected').val()
+      },
+      success: function (result) {
+        $('#replyModal').modal('hide');
+        $table.bootstrapTable('refresh');
+      }
+    });
+  }
+});
+$('#delConfirm').click(function () {
+  if(clickId != ''){
+    $.ajax({
+      url: '/admin/del/message',
+      method: 'POST',
+      data: {
+        id: clickId
+      },
+      success: function (result) {
+        $('#removeModal').modal('hide');
+        $table.bootstrapTable('remove', {
+          field: 'id',
+          values: [clickId]
+        });
+      }
+    });
+  }
+});
+
 window.operateEvents = {
   'click [title=show]': function (e, value, row, index) {
     if (!$('tr[data-index="' + index + '"]+tr.detail-view').html()) {
@@ -249,49 +287,22 @@ window.operateEvents = {
   },
   'click [title=edit]': function (e, value, row, index) {
     // alert('You click edit action, row: ' + JSON.stringify(row));
-    alert('编辑功能暂未完成');
+    // confirm('确认编辑吗？');
+    alert('编辑功能暂不开放');
   },
   'click [title=reply]': function (e, value, row, index) {
-    var messageId = row.id;
+    // var messageId = row.id;
     var title = row.title;
+    // alert(row.id);
     var reContent = row.reContent;
-    $('#replyModal #myModalLabel').html('回复主题：' + title);
-    $('#reContent').val(reContent);
+    $('#myReplyModalLabel').html('回复主题：' + title);
+    $('textarea[name=reContent]').val(reContent);
     $('#replyModal').modal('show');
-    $('#replyConfirm').click(function () {
-      $.ajax({
-        url: "/admin/reply/" + messageId,
-        method: 'POST',
-        data: {
-          reContent: $('#replyModal #reContent').val(),
-          status: $('#replyModal #status').val()
-        },
-        success: function (result) {
-          $('#replyModal').modal('hide');
-          $('#toolbar').append(result);
-          $table.bootstrapTable('refresh');
-        }
-      });
-    });
+    clickId = row.id;
   },
   'click [title=remove]': function (e, value, row, index) {
-    var messageId = row.id;
-    // $('#delConfirm').attr('messageId',messageId);
     $('#removeModal').modal('show');
-    $('#delConfirm').click(function () {
-      // var messageId = $(this).attr('messageId');
-      $.ajax({
-        url: '/admin/del/message/' + messageId, method: 'POST', success: function (result) {
-          // var alertMessage = '<span class="alert alert-danger">' + result + '</span>';
-          $('#removeModal').modal('hide');
-          // $('#toolbar').append(alertMessage);
-          $table.bootstrapTable('remove', {
-            field: 'id',
-            values: [row.id]
-          });
-        }
-      });
-    });
+    clickId = row.id;
   }
 };
 

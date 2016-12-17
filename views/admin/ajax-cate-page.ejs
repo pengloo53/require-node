@@ -10,25 +10,30 @@
         </tr>
         </thead>
         <tbody>
-        <form action="#">
-            <tr class="text-center">
-                <td>0</td>
-                <td class="text-center">
-                    <select name="category" id="" class="form-control text-center">
-                        <option value="ERP">ERP</option>
-                        <option value="IT">IT</option>
-                    </select>
-                </td>
-                <td><input type="text" class="form-control text-center" name="keyname"></td>
-                <td><button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span></button></td>
-            </tr>
-        </form>
+        <tr class="text-center">
+            <td>0</td>
+            <td class="text-center">
+                <select name="category" class="form-control text-center">
+                    <option value="ERP">ERP</option>
+                    <option value="IT" selected>IT</option>
+                </select>
+            </td>
+            <td><input type="text" class="form-control text-center" name="keyname"></td>
+            <td>
+                <button id="addCateBtn" class="btn btn-success btn-sm"><span
+                            class="glyphicon glyphicon-plus"></span></button>
+            </td>
+        </tr>
         <% for(var i = 0 ; i < cates.length; i++){ %>
         <tr class="text-center">
             <td><%= i + 1 %></td>
             <td><%= cates[i].category %></td>
             <td><%= cates[i].keyname %></td>
-            <td><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button></td>
+            <td>
+                <button class="delCateBtn btn btn-danger btn-xs" data-id="<%= cates[i].id %>"><span
+                            class="glyphicon glyphicon-remove"></span>
+                </button>
+            </td>
         </tr>
         <% } %>
 

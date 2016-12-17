@@ -236,7 +236,7 @@ router.post('/login', function (req, res, next) {
     dbUser.valideUser(username, function (errs, rows) {
       console.log('errs:' + errs + '\nrows :' + rows[0]);
       if (!errs) {
-        if (rows[0].password && password == rows[0].password) {
+        if (rows[0] && rows[0].password && password == rows[0].password) {
           console.log('登陆成功');
           req.session.username = username;
           res.redirect('/admin');

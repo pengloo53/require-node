@@ -13,9 +13,9 @@
         <tr class="text-center">
             <td>0</td>
             <td><input type="text" class="form-control text-center" name="plant" value="B1" disabled></td>
-            <td><input type="text" class="form-control" name="deptname"></td>
+            <td><input type="text" class="form-control text-center" name="deptname"></td>
             <td>
-                <button id="addDeptForm" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span>
+                <button id="addDeptBtn" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span>
                 </button>
             </td>
         </tr>
@@ -25,7 +25,8 @@
             <td><%= depts[i].plant %></td>
             <td><%= depts[i].deptname %></td>
             <td>
-                <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+                <button data-id="<%= depts[i].id %>" class="btn btn-danger btn-xs delDeptBtn"><span
+                            class="glyphicon glyphicon-remove"></span></button>
             </td>
         </tr>
         <% } %>

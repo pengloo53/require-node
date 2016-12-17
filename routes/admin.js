@@ -79,8 +79,8 @@ router.get('/:status', function (req, res, next) {
 
 /*------------------------BEGIN Ajax-----------------------------------*/
 /* reply message */
-router.post('/reply/:id', function (req, res, next) {
-  var id = req.params.id;
+router.post('/reply', function (req, res, next) {
+  var id = req.body.id;
   var reContent = req.body.reContent;
   var reTime = myUtil.getTime(new Date());
   var reUser = myUtil.getIp(req);
@@ -123,8 +123,8 @@ router.post('/add/:table', function(req,res,next){
 });
 
 /* Delete */
-router.post('/del/:table/:id', function (req, res, next) {
-  var id = req.params.id;
+router.post('/del/:table', function (req, res, next) {
+  var id = req.body.id;
   var table = req.params.table;
   if (table && table == 'message') {
     dbMessage.delMessage(id, function (errs, rows) {
