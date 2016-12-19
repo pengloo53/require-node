@@ -10,6 +10,9 @@ $(function () {
           global: false,
           success: function (result) {
             $('#mainContent').html(result);
+            // 获取input的焦点
+            $('input[name=deptname]').get(0).focus();
+            // 异步添加dept
             $('#addDeptBtn').click(function () {
               var plant = $('input[name=plant]').val();
               var deptname = $('input[name=deptname]').val();
@@ -26,18 +29,12 @@ $(function () {
                     ajaxReturnMessageForGlobal = result;
                   }
                 });
-              }else{
+              } else {
                 alert('不允许为空，请重新输入');
               }
             });
-            $('input').focus(function(){
-              $(this).keyup(function(e){
-                if(e.which == 13){
-                  $('#addDeptBtn').click();
-                }
-              })
-            });
-            $('.delDeptBtn').click(function(){
+            // 异步删除dept
+            $('.delDeptBtn').click(function () {
               var delId = $(this).data('id');
               // alert(delId);
               var $this = $(this);
@@ -47,7 +44,7 @@ $(function () {
                   id: delId
                 },
                 method: 'POST',
-                success: function(result){
+                success: function (result) {
                   ajaxReturnMessageForGlobal = result;
                   $this.parent().parent().fadeOut(500);
                 }
@@ -62,11 +59,13 @@ $(function () {
           global: false,
           success: function (result) {
             $('#mainContent').html(result);
-            $('#addCateBtn').click(function(){
+            // 获取input的焦点
+            $('input[name=keyname]').get(0).focus();
+            $('#addCateBtn').click(function () {
               var category = $('option:selected').val();
               var keyname = $('input[name=keyname]').val();
               // alert(category);
-              if(category && keyname.trim()){
+              if (category && keyname.trim()) {
                 $.ajax({
                   url: '/admin/add/cates/',
                   method: "POST",
@@ -74,22 +73,15 @@ $(function () {
                     category: category,
                     keyname: keyname
                   },
-                  success: function(result){
+                  success: function (result) {
                     ajaxReturnMessageForGlobal = result;
                   }
                 });
-              }else{
+              } else {
                 alert('不允许为空，请重新输入');
               }
             });
-            $('input').focus(function(){
-              $(this).keyup(function(e){
-                if(e.which == 13){
-                  $('#addCateBtn').click();
-                }
-              })
-            });
-            $('.delCateBtn').click(function(){
+            $('.delCateBtn').click(function () {
               var delId = $(this).data('id');
               var $this = $(this);
               $.ajax({
@@ -98,7 +90,7 @@ $(function () {
                   id: delId
                 },
                 method: 'POST',
-                success: function(result){
+                success: function (result) {
                   ajaxReturnMessageForGlobal = result;
                   $this.parent().parent().fadeOut(500);
                 }
@@ -121,17 +113,27 @@ $(function () {
   });
 
   /* ajaxSuccess 全局事件 */
-  $(document).ajaxSuccess(function(evt, request, settings){
-    var $message = $('<strong>'+ajaxReturnMessageForGlobal +'</strong>');
+  $(document).ajaxSuccess(function (evt, request, settings) {
+    var $message = $('<strong>' + ajaxReturnMessageForGlobal + '</strong>');
     $message.appendTo('.container .row:eq(1) .nav').css({
       'color': 'red',
       'top': '10px',
       'position': 'relative'
     }).animate({'left': +20 + 'px'}, 'normal', function () {
-      $(this).fadeOut('normal',function(){
+      $(this).fadeOut('normal', function () {
         $(this).remove();
         $('.nav li[class=active]').click();
       });
     });
+  });
+  /* 回车按钮触发 */
+  $(document).keyup(function (e) {
+    if (e.which == 13) {
+      if($('input[name=deptname]').length){
+        $('#addDeptBtn').click();
+      }else if($('input[name=keyname]').length){
+        $('#addCateBtn').click();
+      }
+    }
   });
 });
